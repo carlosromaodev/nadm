@@ -1,0 +1,57 @@
+/* Same components and reading order at every width; desktop is a workspace,
+   not a phone bezel. Breakpoints follow available space, not device names. */
+.app-screen { position: relative; }
+.screen-content { min-width: 0; overflow-wrap: anywhere; scroll-padding-block: 16px; }
+.screen-header, .screen-footer { min-width: 0; }
+.nav-brand { display: none; }
+.skip-link { position: fixed; z-index: 100; top: 8px; left: 8px; transform: translateY(-200%); border-radius: 12px; padding: 12px 18px; background: var(--color-lime); color: var(--color-lime-ink); font-weight: 900; }
+.skip-link:focus { transform: none; }
+.adaptive-grid > *, .workspace-grid > *, .split-layout > * { min-width: 0; }
+.adaptive-grid { display: grid; gap: 12px; }
+
+@media (min-width: 600px) {
+  .screen-header { padding: max(20px, env(safe-area-inset-top)) 24px 18px; }
+  .screen-content { padding: 8px 24px 24px; }
+  .screen-footer { padding: 16px 24px max(16px, env(safe-area-inset-bottom)); }
+  .screen-footer > button, .screen-footer > a { width: auto; min-width: min(100%, 300px); }
+  .screen-footer > p { text-align: left; }
+  .adaptive-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .adaptive-grid > * { margin-top: 0; margin-bottom: 0; }
+  .app-sheet { max-width: 560px; inset: 24px; max-height: calc(100dvh - 48px); border-radius: 28px; padding: 24px; }
+}
+
+@media (min-width: 1024px) {
+  .app-screen:has(> .app-nav) { display: grid; grid-template-columns: 208px minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; }
+  .app-screen:has(> .app-nav) > .screen-header { grid-area: 1 / 2; }
+  .app-screen:has(> .app-nav) > .screen-content { grid-area: 2 / 2; }
+  .app-screen:has(> .app-nav) > .screen-footer { grid-area: 3 / 2; }
+  .app-nav { grid-area: 1 / 1 / 4 / 2; display: flex; flex-direction: column; gap: 8px; padding: 28px 16px; border-top: 0; border-right: 1px solid var(--color-line); background: var(--color-surface); overflow: auto; }
+  .nav-brand { display: flex; flex-direction: column; padding: 0 16px 32px; }
+  .nav-brand > span { font-size: 32px; line-height: 1.2; font-weight: 1000; letter-spacing: -.06em; }
+  .nav-brand > small { margin-top: 4px; font-size: 12px; font-weight: 700; color: var(--color-dim); }
+  .app-nav > a { flex-direction: row; gap: 12px; align-items: center; min-height: 52px; padding: 10px 12px; font-size: 14px; }
+  .app-nav > a > span { width: 32px; height: 32px; }
+  .app-nav > a[aria-current='page'] { background: var(--color-lime); color: var(--color-lime-ink); }
+  .screen-header { padding: 24px 32px 20px; }
+  .screen-content { padding: 8px 32px 32px; }
+  .screen-footer { padding-inline: 32px; }
+  .workspace-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
+  .workspace-wide { grid-column: 1 / -1; }
+  .split-layout { display: grid; grid-template-columns: minmax(280px, .8fr) minmax(0, 1.6fr); gap: 32px; align-items: start; }
+  .split-sidebar { position: sticky; top: 0; }
+  .adaptive-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 16px; }
+  .category-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .form-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; align-content: start; align-items: start; }
+  .form-layout > * { min-width: 0; }
+  .form-layout > dialog { grid-column: 1 / -1; }
+}
+
+/* Small landscape screens and the virtual keyboard must not leave a zero-height
+   main between a tall header and a fixed action. One scroll container then wins. */
+[data-compact-height] .app-screen { overflow: auto; display: flex; }
+[data-compact-height] .screen-content { flex: 1 0 auto; overflow: visible; }
+[data-compact-height] .screen-header, [data-compact-height] .screen-footer, [data-compact-height] .app-nav { flex-shrink: 0; }
+@media (min-width: 1024px) {
+  [data-compact-height] .app-screen > .app-nav { flex-direction: row; border-right: 0; border-top: 1px solid var(--color-line); padding: 8px 16px; }
+  [data-compact-height] .nav-brand { display: none; }
+}

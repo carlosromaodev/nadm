@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;0,1000&display=swap"><style>
+body{margin:0;background:#14231a;-webkit-font-smoothing:antialiased}
+a{color:#e1f83b;text-decoration:none}a:hover{color:#eefb84}
+@keyframes wsrise{from{transform:translateY(16px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes wsspin{to{transform:rotate(360deg)}}
+</style></helmet>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"><defs><path id="nadm-flor" d="M0 -48.8C1.7 -48.8 3.4 -48.6 5.1 -48.3C6.8 -48.1 8.4 -47.8 10 -47.3C11.6 -46.7 13.7 -47.1 14.6 -45C15.5 -43 15.4 -38.6 15.2 -35C15 -31.3 12.3 -24.1 13.4 -23.2C14.6 -22.4 19.2 -28.1 22.1 -30C25.1 -31.9 28.9 -34.2 31.1 -34.5C33.4 -34.8 34.2 -33 35.5 -32C36.8 -30.9 38 -29.7 39.1 -28.4C40.2 -27.1 41.1 -25.7 42 -24.2C42.8 -22.8 43.6 -21.3 44.2 -19.7C44.8 -18.1 45.4 -16.5 45.6 -14.8C45.8 -13.2 46.7 -11.5 45.3 -9.7C44 -7.9 40.3 -5.8 37.5 -4.2C34.6 -2.6 28.7 -1.3 28.1 0C27.5 1.3 31.3 2.2 34.1 3.8C36.9 5.4 43.2 7.8 45.1 9.6C47.1 11.5 45.8 13.2 45.6 14.8C45.5 16.5 44.9 18.2 44.3 19.7C43.7 21.3 43 22.9 42.1 24.3C41.3 25.8 40.3 27.2 39.2 28.5C38.1 29.8 37 31.1 35.7 32.1C34.4 33.1 33.5 35 31.3 34.7C29.1 34.4 25.3 32.2 22.3 30.3C19.4 28.4 14.7 22.7 13.5 23.4C12.3 24.2 15.1 31.4 15.2 35C15.4 38.5 15.5 42.9 14.6 45C13.7 47 11.6 46.6 10 47.1C8.4 47.7 6.7 48.1 5.1 48.4C3.4 48.6 1.7 48.7 0 48.7C-1.7 48.7 -3.4 48.7 -5.1 48.4C-6.8 48.2 -8.4 47.8 -10 47.3C-11.6 46.7 -13.8 47.1 -14.6 45.1C-15.5 43 -15.4 38.6 -15.2 35C-15.1 31.4 -12.4 24.2 -13.5 23.5C-14.7 22.7 -19.4 28.4 -22.3 30.3C-25.3 32.2 -29.1 34.4 -31.3 34.7C-33.5 35 -34.4 33.1 -35.7 32.1C-37 31.1 -38.1 29.8 -39.2 28.5C-40.3 27.2 -41.3 25.8 -42.1 24.3C-43 22.9 -43.7 21.3 -44.3 19.7C-44.9 18.2 -45.5 16.5 -45.6 14.8C-45.8 13.2 -47.1 11.5 -45.2 9.6C-43.2 7.8 -36.9 5.4 -34.1 3.8C-31.2 2.2 -27.5 1.3 -28.1 0C-28.7 -1.3 -34.7 -2.6 -37.6 -4.2C-40.5 -5.8 -44 -7.9 -45.4 -9.7C-46.7 -11.5 -45.8 -13.2 -45.6 -14.8C-45.4 -16.5 -44.8 -18.1 -44.2 -19.7C-43.6 -21.3 -42.8 -22.8 -41.9 -24.2C-41.1 -25.6 -40.1 -27.1 -39 -28.3C-37.9 -29.6 -36.8 -30.9 -35.5 -32C-34.2 -33 -33.3 -34.8 -31.1 -34.5C-28.9 -34.2 -25.1 -31.9 -22.2 -30C-19.2 -28.1 -14.4 -22.1 -13.4 -23.2C-12.4 -24.4 -16 -33.3 -16.2 -36.9C-16.4 -40.5 -15.6 -43.2 -14.6 -44.9C-13.5 -46.6 -11.6 -46.5 -10 -47.1C-8.4 -47.7 -6.7 -48 -5.1 -48.3C-3.4 -48.6 -1.7 -48.8 0 -48.8Z"></path></defs></svg>
+<div style="min-height:100vh;background:#14231a;color:#f6f8f3;font-family:'Nunito',system-ui,sans-serif;padding:34px 30px 70px">
+
+<div style="max-width:1120px;margin:0 auto">
+
+<div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+<div style="background:#264132;border-radius:22px;padding:6px 18px;display:flex;align-items:center;overflow:hidden">
+<img src="assets/nadm-logo.png" alt="NaDM" style="display:block;height:52px;width:auto;object-fit:contain"></div>
+<div style="font:800 12px 'Nunito',system-ui;letter-spacing:.16em;text-transform:uppercase;color:rgba(246,248,243,.55)">Entrega 1 a 6 · P0 até P37</div>
+</div>
+
+<h1 style="font:1000 46px/1.05 'Nunito',system-ui;letter-spacing:-.04em;margin:26px 0 14px;max-width:16ch;text-wrap:pretty">A DM deixa de ser conversa e passa a ser loja.</h1>
+<p style="font:600 16px/1.6 'Nunito',system-ui;color:rgba(246,248,243,.68);max-width:62ch;margin:0 0 30px;text-wrap:pretty">Abaixo está o sistema de desenho da NaDM extraído do logotipo, e depois trinta e sete ecrãs em telemóvel, em seis blocos: o <strong style="color:rgba(246,248,243,.9)">núcleo</strong> (P1–P5) — perfil público, publicação e desbloqueio, playlist e leitor, a DM e a conversa com o pedido lá dentro; o <strong style="color:rgba(246,248,243,.9)">caminho do dinheiro</strong> (P6–P10) — briefing, Express, pedido criado, entrega e aprovação, avaliação e devolução; o <strong style="color:rgba(246,248,243,.9)">lado de quem trabalha</strong> (P11–P20) — área do comprador, painel, caixa, pedido de marca, publicar, ofertas, agenda, carteira, números e o centro de controlo das definições; a <strong style="color:rgba(246,248,243,.9)">porta de entrada e as duas entregas</strong> (P21–P24) — os cinco modos de entrar, a criação do perfil em sete passos, o criador a entregar o trabalho e a marcação da chamada; o <strong style="color:rgba(246,248,243,.9)">lado de quem compra</strong> (P25–P30) — início, descoberta, avisos, mensagens fora da app, a adesão mensal e o link a circular; e os <strong style="color:rgba(246,248,243,.9)">módulos novos</strong> (P31–P37) — o evento pelos dois lados, o NaDM Pro, o workspace da marca, a denúncia com recurso, o centro de segurança e o mimo. Cada ecrã muda de estado pelos botões do painel, em tema escuro e claro ao mesmo tempo.</p>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(248px,1fr));gap:12px;margin-bottom:44px">
+<div style="background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:22px;padding:16px 18px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:#e1f83b">A ideia</div>
+<p style="font:600 13.5px/1.55 'Nunito',system-ui;color:rgba(246,248,243,.75);margin:8px 0 0">O logotipo é uma flor gorda de seis pétalas: nada aqui tem canto vivo. O sistema é todo feito de formas moles — pílulas, cantos de 20 a 26px, círculos — sobre um verde profundo, com o lima reservado para uma coisa só: dinheiro e o que está a acontecer agora.</p>
+</div>
+<div style="background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:22px;padding:16px 18px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:#e1f83b">O elemento memorável</div>
+<p style="font:600 13.5px/1.55 'Nunito',system-ui;color:rgba(246,248,243,.75);margin:8px 0 0">A flor. Gira quando o sistema espera pelo banco, carimba quando um pedido muda de estado, e é ela que está por trás do conteúdo fechado em vez de um cadeado triste. Uma só forma a fazer três trabalhos.</p>
+</div>
+<div style="background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:22px;padding:16px 18px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:#e1f83b">Decisão: escuro e claro</div>
+<p style="font:600 13.5px/1.55 'Nunito',system-ui;color:rgba(246,248,243,.75);margin:8px 0 0">O escuro é o principal — é onde o logotipo vive, gasta menos bateria e favorece foto e vídeo. O claro existe porque muita gente usa o telemóvel ao sol, na rua. Os dois correm dos mesmos tokens; só mudam os valores.</p>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px">
+<span style="font:1000 11px 'Nunito',system-ui;letter-spacing:.1em;background:#e1f83b;color:#16281e;border-radius:999px;padding:5px 11px">P0</span>
+<h2 style="font:1000 26px 'Nunito',system-ui;letter-spacing:-.03em;margin:0">Fundações</h2>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-bottom:14px">
+<div style="background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:24px;padding:18px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,248,243,.5);margin-bottom:12px">Cor · tema escuro</div>
+<div style="display:flex;flex-direction:column;gap:7px">
+<sc-for list="{{coresEscuro}}" as="c" hint-placeholder-count="7">
+<div style="display:flex;align-items:center;gap:11px">
+<span style="{{c.chip}}"></span>
+<span style="font:900 12.5px 'Nunito',system-ui;flex:1">{{c.nome}}</span>
+<span style="font:700 11.5px 'Nunito',system-ui;color:rgba(246,248,243,.5)">{{c.hex}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:24px;padding:18px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,248,243,.5);margin-bottom:12px">Cor · tema claro</div>
+<div style="display:flex;flex-direction:column;gap:7px">
+<sc-for list="{{coresClaro}}" as="c" hint-placeholder-count="7">
+<div style="display:flex;align-items:center;gap:11px">
+<span style="{{c.chip}}"></span>
+<span style="font:900 12.5px 'Nunito',system-ui;flex:1">{{c.nome}}</span>
+<span style="font:700 11.5px 'Nunito',system-ui;color:rgba(246,248,243,.5)">{{c.hex}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:24px;padding:18px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,248,243,.5);margin-bottom:12px">Tipografia · uma família, sete pesos</div>
+<div style="font:1000 34px/1 'Nunito',system-ui;letter-spacing:-.04em">18 000 Kz</div>
+<div style="font:700 11px 'Nunito',system-ui;color:rgba(246,248,243,.5);margin:4px 0 12px">1000 · valores e títulos · -4% de tracking</div>
+<div style="font:900 19px 'Nunito',system-ui;letter-spacing:-.02em">Resposta em vídeo</div>
+<div style="font:700 11px 'Nunito',system-ui;color:rgba(246,248,243,.5);margin:3px 0 12px">900 · nomes de coisas e acções</div>
+<div style="font:700 13.5px/1.5 'Nunito',system-ui">O dinheiro fica retido até a entrega ser aprovada.</div>
+<div style="font:700 11px 'Nunito',system-ui;color:rgba(246,248,243,.5);margin:3px 0 12px">700 · texto corrido, nunca abaixo de 12px</div>
+<div style="font:800 10.5px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,248,243,.6)">Pedido #A-2481</div>
+<div style="font:700 11px 'Nunito',system-ui;color:rgba(246,248,243,.5);margin-top:3px">800 em caixa alta · etiquetas e referências</div>
+</div>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:12px;margin-bottom:14px">
+<div style="background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:24px;padding:18px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,248,243,.5);margin-bottom:14px">Espaço, raio e elevação</div>
+<div style="display:flex;align-items:flex-end;gap:7px;margin-bottom:14px">
+<sc-for list="{{espacos}}" as="e" hint-placeholder-count="6">
+<div style="text-align:center">
+<div style="{{e.bar}}"></div>
+<div style="font:800 10px 'Nunito',system-ui;color:rgba(246,248,243,.5);margin-top:5px">{{e.v}}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;gap:9px;align-items:flex-end">
+<div style="width:56px;height:44px;border-radius:14px;background:#2b4736;display:flex;align-items:flex-end;justify-content:center;font:800 10px 'Nunito',system-ui;padding-bottom:4px;color:rgba(246,248,243,.6)">14</div>
+<div style="width:64px;height:52px;border-radius:20px;background:#2b4736;display:flex;align-items:flex-end;justify-content:center;font:800 10px 'Nunito',system-ui;padding-bottom:5px;color:rgba(246,248,243,.6)">20</div>
+<div style="width:72px;height:58px;border-radius:26px;background:#2b4736;display:flex;align-items:flex-end;justify-content:center;font:800 10px 'Nunito',system-ui;padding-bottom:6px;color:rgba(246,248,243,.6)">26</div>
+<div style="height:44px;padding:0 18px;border-radius:999px;background:#e1f83b;color:#16281e;display:flex;align-items:center;font:900 13px 'Nunito',system-ui">999</div>
+</div>
+<p style="font:700 12px/1.5 'Nunito',system-ui;color:rgba(246,248,243,.55);margin:14px 0 0">Nada de sombras duras: a elevação é uma superfície mais clara e um contorno de 1px. Só a folha inferior usa sombra a sério, porque tem de flutuar.</p>
+</div>
+<div style="background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:24px;padding:18px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,248,243,.5);margin-bottom:14px">Movimento</div>
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+<svg viewBox="-50 -50 100 100" style="width:52px;height:52px;flex:none"><g style="animation:wsspin 2.4s linear infinite;transform-origin:center"><use href="#nadm-flor" fill="#e1f83b"></use></g></svg>
+<div style="font:700 12.5px/1.5 'Nunito',system-ui;color:rgba(246,248,243,.7)">A flor a girar é o único indicador de espera do sistema. Aparece quando dependemos de outra coisa: o banco, a rede, o vídeo.</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<sc-for list="{{movimento}}" as="m" hint-placeholder-count="5">
+<div style="display:flex;justify-content:space-between;gap:12px;border-top:1px solid rgba(246,248,243,.08);padding-top:8px">
+<div><div style="font:900 12.5px 'Nunito',system-ui">{{m.nome}}</div><div style="font:700 11.5px/1.4 'Nunito',system-ui;color:rgba(246,248,243,.5)">{{m.uso}}</div></div>
+<div style="font:800 11.5px 'Nunito',system-ui;color:#e1f83b;flex:none;text-align:right">{{m.valor}}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div style="background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:24px;padding:18px;margin-bottom:46px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,248,243,.5);margin-bottom:14px">Componentes base · nome e regra de uso</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:10px">
+<sc-for list="{{componentes}}" as="c" hint-placeholder-count="11">
+<div style="background:#16281e;border:1px solid rgba(246,248,243,.09);border-radius:18px;padding:13px 14px">
+<div style="display:flex;align-items:center;gap:8px"><span style="width:7px;height:7px;border-radius:999px;background:#e1f83b;flex:none"></span><div style="font:900 13.5px 'Nunito',system-ui">{{c.nome}}</div></div>
+<div style="font:700 11.5px/1.5 'Nunito',system-ui;color:rgba(246,248,243,.55);margin-top:6px">{{c.regra}}</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div style="display:flex;align-items:baseline;gap:12px;margin-bottom:6px">
+<span style="font:1000 11px 'Nunito',system-ui;letter-spacing:.1em;background:#e1f83b;color:#16281e;border-radius:999px;padding:5px 11px">{{ecraId}}</span>
+<h2 style="font:1000 26px 'Nunito',system-ui;letter-spacing:-.03em;margin:0">{{ecraTitulo}}</h2>
+</div>
+<p style="font:600 14.5px/1.6 'Nunito',system-ui;color:rgba(246,248,243,.65);max-width:64ch;margin:0 0 20px">{{ecraNota}}</p>
+
+<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px">
+<sc-for list="{{ecras}}" as="s" hint-placeholder-count="5">
+<button onClick="{{s.pick}}" style="{{s.style}}">{{s.label}}</button>
+</sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:12px 14px;background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:20px;margin-bottom:28px">
+<span style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,248,243,.45);margin-right:4px">Estados</span>
+<sc-for list="{{estados}}" as="e" hint-placeholder-count="4">
+<button onClick="{{e.pick}}" style="{{e.style}}">{{e.label}}</button>
+</sc-for>
+</div>
+
+<div style="display:flex;flex-wrap:wrap;gap:34px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:12px;animation:wsrise .5s cubic-bezier(.2,.8,.2,1) both">
+<div style="display:flex;align-items:center;gap:9px"><span style="width:9px;height:9px;border-radius:999px;background:#e1f83b"></span><span style="font:900 13px 'Nunito',system-ui">Escuro — principal</span></div>
+<dc-import name="NaDMScreen" screen="{{screen}}" variant="{{variant}}" tab="{{tab}}" sheet="{{sheet}}" skin="dark" on-nav="{{onNav}}" on-tab="{{onTab}}" on-sheet="{{onSheet}}" reaccao="{{reaccao}}" motivo="{{motivo}}" on-reaccao="{{onReaccao}}" on-motivo="{{onMotivo}}" hint-size="390px,844px"></dc-import>
+</div>
+<sc-if value="{{mostrarClaro}}" hint-placeholder-val="{{true}}">
+<div style="display:flex;flex-direction:column;gap:12px;animation:wsrise .6s cubic-bezier(.2,.8,.2,1) both">
+<div style="display:flex;align-items:center;gap:9px"><span style="width:9px;height:9px;border-radius:999px;background:#f6f8f3"></span><span style="font:900 13px 'Nunito',system-ui">Claro — mesmo estado, ao sol</span></div>
+<dc-import name="NaDMScreen" screen="{{screen}}" variant="{{variant}}" tab="{{tab}}" sheet="{{sheet}}" skin="light" on-nav="{{onNav}}" on-tab="{{onTab}}" on-sheet="{{onSheet}}" reaccao="{{reaccao}}" motivo="{{motivo}}" on-reaccao="{{onReaccao}}" on-motivo="{{onMotivo}}" hint-size="390px,844px"></dc-import>
+</div>
+</sc-if>
+<div style="flex:1;min-width:258px;max-width:360px;background:#1d3226;border:1px solid rgba(246,248,243,.1);border-radius:24px;padding:18px">
+<div style="font:800 10px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(246,248,243,.5);margin-bottom:10px">O que está a acontecer neste ecrã</div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{decisoes}}" as="d" hint-placeholder-count="3">
+<div style="border-top:1px solid rgba(246,248,243,.08);padding-top:10px">
+<div style="font:900 13px 'Nunito',system-ui">{{d.t}}</div>
+<div style="font:700 12px/1.5 'Nunito',system-ui;color:rgba(246,248,243,.6);margin-top:4px">{{d.d}}</div>
+</div>
+</sc-for>
+</div>
+<div style="font:700 11.5px/1.5 'Nunito',system-ui;color:rgba(246,248,243,.45);margin-top:16px;border-top:1px solid rgba(246,248,243,.08);padding-top:12px">Os dois telemóveis estão ligados: o que tocares num aparece no outro. Rectângulos riscados são onde entram fotos e vídeos reais.</div>
+</div>
+</div>
+
+<div style="margin-top:46px;border-top:1px solid rgba(246,248,243,.1);padding-top:20px;font:700 13px/1.6 'Nunito',system-ui;color:rgba(246,248,243,.55);max-width:72ch">
+<div style="font:1000 16px 'Nunito',system-ui;color:#f6f8f3;margin-bottom:8px">A seguir</div>
+Trinta e sete ecrãs, das fundações ao levantamento e à porta de um evento, pelos dois lados do mercado. As últimas passagens responderam à auditoria. O modelo de taxa passou a ser um só — 5% do comprador e 5% do criador, escritos em ambos os lados antes de pagar, com todos os valores derivados de uma tabela de preços única, e os agregados da carteira a bater com a soma das linhas. Os quatro bugs de roteamento que sobravam ficaram fechados: o carregamento já não conclui antes do upload, nem no publicar nem na entrega; a criação de pasta deixou de fazer ciclo; os switches da adesão deixaram de abrir recibos. E os controlos que eram desenho passaram a ter estado: preços, pastas, etiquetas, +/− de prazo, vagas e alterações, direitos, regras, cancelamento, capacidade diária, dias, horários, fontes de foto, avisos e definições — a marcação de chamada só deixa pagar depois de haver dia e hora. Depois entraram os estados que faltavam às máquinas de estado: o BI recusado, a selfie em falta e a verificação suspensa; o levantamento em validação e o revertido; a cobrança em atraso e a tolerância de sete dias, que é o que separa falhar um pagamento de cancelar a adesão. E dois módulos: o <strong style="color:rgba(246,248,243,.78)">evento Numa última passagem, a navegação passou a ser <strong style="color:rgba(246,248,243,.78)">uma por contexto e não uma por ecrã</strong>: o criador tem sempre Painel · Caixa · Criar · Perfil, quem compra tem Início · Descobrir · DM · Meu, a marca tem Painel · Campanhas · Criadores · Caixa. O que as barras antigas mostravam — Ofertas, Agenda, Carteira, Números, Pro e Segurança — passou a viver numa grelha dentro do Painel, com o estado de cada um à vista. Ao mesmo tempo, o checkout deixou de assumir que tudo é um vídeo de 18 000 Kz: o P7 lê o produto de quem o chamou, e o bilhete cobra o bilhete.</strong> (P31–P32), com lotação por escalão lida de uma fonte única pelos dois lados, leitor à porta e cancelamento que devolve tudo; e o <strong style="color:rgba(246,248,243,.78)">NaDM Pro</strong> (P33), que é a linha que faltava entre o preço por escalões e o preço livre — no grátis a criadora paga 5% e escolhe de uma lista, no Pro escreve o número e a taxa dela cai a zero. Por fim entraram o <strong style="color:rgba(246,248,243,.78)">workspace da marca</strong> (P34), que dá casa ao outro lado das campanhas que já existiam na caixa da criadora; a <strong style="color:rgba(246,248,243,.78)">denúncia com bloqueio e recurso</strong> (P35), incluindo a suspensão vista de dentro; e o <strong style="color:rgba(246,248,243,.78)">centro de segurança</strong> (P36), com sessões por aparelho, entrada desconhecida e recuperação pelo BI. Falta o documento com as máquinas de estado, o glossário financeiro e a matriz de taxas.</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;mostrarClaro&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Apresentação&quot;}}">
+class Component extends DCLogic {
+  state = { screen: 'p1', tab: 'conteudo', sheet: null, variants: { p1: 'cheio', p2: 'bloqueado', p3: 'nao', p4: 'tudo', p5: 'espera', p6: 'teclado', p7: 'aguardar', p8: 'espera', p9: 'entregue', p10: 'poravaliar', p11: 'biblioteca', p12: 'cheio', p13: 'naolidos', p14: 'decidir', p15: 'rascunho', p16: 'activa', p17: 'disponivel', p18: 'saldo', p19: 'dados', p20: 'hub', p21: 'escolher', p22: 'tipo', p23: 'decidir', p24: 'escolher', p25: 'cheio', p26: 'inicial', p27: 'tudo', p28: 'push', p29: 'oferta', p30: 'cartao', p31: 'venda', p32: 'escolher', p33: 'oferta', p34: 'campanhas', p35: 'denunciar', p36: 'sessoes', p37: 'escolher' }, reaccao: null, motivo: null };
+
+  renderVals() {
+    const st = this.state;
+    const variant = st.variants[st.screen];
+    const chipOn = "height:34px;padding:0 15px;border-radius:999px;border:none;background:#e1f83b;color:#16281e;font:900 12.5px 'Nunito',system-ui";
+    const chipOff = "height:34px;padding:0 15px;border-radius:999px;border:1px solid rgba(246,248,243,.16);background:transparent;color:rgba(246,248,243,.72);font:800 12.5px 'Nunito',system-ui";
+    const tabOn = "height:40px;padding:0 17px;border-radius:999px;border:none;background:#e1f83b;color:#16281e;font:900 13.5px 'Nunito',system-ui";
+    const tabOff = "height:40px;padding:0 17px;border-radius:999px;border:1px solid rgba(246,248,243,.16);background:transparent;color:#f6f8f3;font:800 13.5px 'Nunito',system-ui";
+
+    const meta = {
+      p1: {
+        id: 'P1', titulo: 'Perfil público do criador',
+        nota: 'A mesma página serve duas pessoas: quem visita a partir da bio do Instagram e o próprio dono. Na visita há sino, partilhar, "Ser membro" e a faixa "Criar o meu NaDM"; no perfil próprio o topo troca para um botão Painel e "Editar perfil", com a barra do criador em baixo. O gratuito domina a grelha; o que está fechado mostra o preço em vez de um cadeado sozinho.',
+        estados: [['cheio', 'Visita'], ['meu', 'É o meu perfil'], ['novo', 'Perfil novo'], ['pausa', 'Criador em pausa'], ['semvagas', 'Sem vagas hoje']],
+        decisoes: [
+          { t: 'Topo reconhecível', d: 'Foto, três números, nome verificado, bio e dois botões — a gramática do Instagram, para ninguém ter de aprender nada.' },
+          { t: 'Tira de confiança', d: 'Identidade, taxa de resposta, tempo médio, trabalhos e avaliação em cartões roláveis, logo acima dos separadores: é o que justifica pagar.' },
+          { t: 'Seis livres, três fechados', d: 'A grelha nunca é uma parede de cadeados. O véu é só um desfoque com o preço, e abre a publicação no ecrã seguinte.' }
+        ]
+      },
+      p2: {
+        id: 'P2', titulo: 'Publicação individual e desbloqueio',
+        nota: 'Ver uma publicação e, se estiver fechada, abri-la sem sair dali. O estado fechado explica o que se ganha, não apenas que está fechado.',
+        estados: [['bloqueado', 'Bloqueado'], ['pagar', 'A processar'], ['aberto', 'Público'], ['membro', 'Incluído p/ membros'], ['meu', 'Já desbloqueado']],
+        decisoes: [
+          { t: 'A flor por trás do véu', d: 'Em vez de cadeado, a flor carimbada e a lista do que está fechado: 3 fotos e 1 vídeo.' },
+          { t: 'Aberto com o desfoque a sair', d: 'A passagem de fechado para aberto é uma só animação — o desfoque sai e a imagem assenta. É o momento que paga o preço.' },
+          { t: 'Preço e retenção juntos', d: 'O valor fica ao lado da acção e a linha abaixo diz que o dinheiro fica retido até abrir.' }
+        ]
+      },
+      p3: {
+        id: 'P3', titulo: 'Playlist paga e leitor de vídeo',
+        nota: 'Vender e ver um conjunto de vídeos com rede irregular. O primeiro vídeo é prévia gratuita e o acesso é dito por palavras, não por ícone.',
+        estados: [['nao', 'Ainda não comprada'], ['previa', 'Prévia a terminar'], ['comprada', 'Comprada'], ['carregar', 'A carregar'], ['offline', 'Sem rede']],
+        decisoes: [
+          { t: 'Prévia que não engana', d: 'O vídeo 1 abre sempre; quando a prévia está a acabar, diz-se em segundos, sobre o leitor.' },
+          { t: 'Duas formas de comprar', d: 'A playlist inteira em destaque e o vídeo avulso abaixo, para quem só quer aquele.' },
+          { t: 'Rede fraca desenhada', d: 'A flor a girar enquanto carrega, e se falhar há duas saídas: tentar outra vez ou ouvir só o som.' }
+        ]
+      },
+      p4: {
+        id: 'P4', titulo: 'A DM: escolher o que pedir',
+        nota: 'Continua a parecer uma conversa a começar, não um catálogo. A criadora fala primeiro; as ofertas entram como linhas no fio, cada uma com preço, prazo e vagas.',
+        estados: [['tudo', 'Tudo disponível'], ['esgotado', 'Esgotado hoje'], ['consulta', 'Sob consulta'], ['pausa', 'Criador em pausa']],
+        decisoes: [
+          { t: 'Mensagem grátis primeiro', d: 'A linha gratuita é a única tracejada: existe, mas não promete resposta. Ninguém é obrigado a pagar para falar.' },
+          { t: 'Preço, prazo, vagas', d: 'Três informações fixas por linha, na mesma posição, de 0 Kz a 45 000 Kz. O ponto lima diz se está aberto.' },
+          { t: 'Escolher abre folha, não página', d: 'Tocar numa oferta levanta a folha inferior com o detalhe e os direitos de uso, à altura do polegar.' }
+        ]
+      },
+      p5: {
+        id: 'P5', titulo: 'Conversa com o pedido lá dentro',
+        nota: 'O fio manda e o pedido vive dentro dele: número, valor retido, estado e prazo num só objecto, que muda de cara à medida que o trabalho anda.',
+        estados: [['espera', 'À espera'], ['aceite', 'Aceite'], ['execucao', 'Em execução'], ['entregue', 'Entregue'], ['alteracao', 'Alteração pedida'], ['aprovado', 'Aprovado'], ['devolvido', 'Devolvido'], ['expirado', 'Expirado']],
+        decisoes: [
+          { t: 'Pedido vivo', d: 'Um cartão com #A-2481, 18 000 Kz, estado carimbado e a barra do prazo. Mexe-se sozinho quando o estado muda.' },
+          { t: 'Acções só quando decidem', d: 'Aprovar e pedir alteração aparecem quando há entrega. Nos outros estados só há a frase que explica o que acontece se ninguém fizer nada.' },
+          { t: 'Nunca vira formulário', d: 'As mensagens continuam a ser mensagens e o campo de texto está sempre lá, com o teclado em mente.' }
+        ]
+      },
+      p6: {
+        id: 'P6', titulo: 'Briefing do pedido',
+        nota: 'Recolher o que a criadora precisa para aceitar sem trocar dez mensagens — em telemóvel, com o teclado aberto a tapar metade do ecrã. Três passos, guardado sozinho.',
+        estados: [['vazio', 'Por preencher'], ['teclado', 'Teclado aberto'], ['incompleto', 'Incompleto'], ['anexos', 'Com anexos'], ['enviar', 'A enviar']],
+        decisoes: [
+          { t: 'O teclado faz parte do desenho', d: 'Com o teclado aberto, a acção principal sobe e fica visível; o rodapé de guardar desaparece em vez de ficar escondido por baixo.' },
+          { t: 'Erro no campo, não no topo', d: 'Falta o nome? A moldura fica terracota e a frase explica o que a criadora precisa. A acção principal fica apagada até estar resolvido.' },
+          { t: 'Nada se perde', d: 'Guardado há 2 minutos, dito por palavras. Sair e voltar é normal com rede irregular.' }
+        ]
+      },
+      p7: {
+        id: 'P7', titulo: 'Pagamento MULTICAIXA Express',
+        nota: 'O ecrã onde se perde dinheiro real. Total com taxa, a frase da retenção antes de pagar, e estados que nunca deixam dúvida sobre o que já aconteceu. O produto vem de quem chamou o ecrã: vídeo, chamada ou bilhete — com a quantidade e o preço certos, não um valor por omissão.',
+        estados: [['aguardar', 'Vídeo · a aguardar'], ['confirmado', 'Vídeo · confirmado'], ['chamada', 'Chamada · a pagar'], ['chamadaok', 'Chamada · marcada'], ['bilhete', 'Bilhete · a pagar'], ['bilheteok', 'Bilhete · comprado'], ['falhado', 'Falhado'], ['expirado', 'Expirado'], ['semrede', 'Sem rede']],
+        decisoes: [
+          { t: 'Um estado, um símbolo', d: 'Flor a girar para espera, círculo lima carimbado para confirmado, contorno terracota para falha. Nunca dois ao mesmo tempo.' },
+          { t: '"Nada foi cobrado"', d: 'Em cada falha a frase diz explicitamente que não saiu dinheiro. É a única forma de alguém tentar outra vez.' },
+          { t: 'Retenção explicada antes', d: 'A regra do dinheiro retido aparece acima do botão, não nos termos.' }
+        ]
+      },
+      p8: {
+        id: 'P8', titulo: 'Pedido criado e estado do pedido',
+        nota: 'O comprador saber exactamente onde está. Número, valor retido, prazo para a criadora aceitar, e o que acontece se ela não responder.',
+        estados: [['espera', 'À espera'], ['aceite', 'Aceite'], ['recusado', 'Recusado com devolução'], ['expirado', 'Expirado com devolução']],
+        decisoes: [
+          { t: 'Quatro passos sempre iguais', d: 'Pagamento, aceitação, entrega, aprovação. O passo actual é o único com cor de estado; os futuros ficam em contorno.' },
+          { t: 'O silêncio tem consequência escrita', d: 'A nota diz a hora limite e que a devolução é automática — ninguém tem de perseguir o dinheiro.' },
+          { t: 'Uma só saída', d: 'Do estado do pedido volta-se sempre à conversa, que é onde o trabalho acontece.' }
+        ]
+      },
+      p9: {
+        id: 'P9', titulo: 'Entrega, alterações e aprovação',
+        nota: 'Fechar o trabalho sem discussão: ficheiro entregue, o que foi pedido lado a lado, uma alteração com limite escrito e o prazo de aprovação automática a correr.',
+        estados: [['entregue', 'Entregue'], ['revisao', 'Em revisão'], ['alteracao', 'Alteração pedida'], ['prazo', 'Prazo a correr'], ['aprovado', 'Aprovado']],
+        decisoes: [
+          { t: 'Pedido e entrega juntos', d: 'O texto do briefing fica visível debaixo do vídeo. É contra isso que se aprova.' },
+          { t: 'Alteração com número', d: '"1 de 1 usada" em vez de "podes pedir alterações". O limite tem de ser lido antes, não descoberto depois.' },
+          { t: 'Aprovação automática visível', d: 'A barra e o contador mostram quanto falta; quando fica curto, a nota diz que aprovamos por ti.' }
+        ]
+      },
+      p10: {
+        id: 'P10', titulo: 'Avaliação, devolução e disputa',
+        nota: 'Reputação verdadeira e o caminho de quando corre mal. Ninguém abre isto de bom humor: tom sóbrio, sem cor a festejar, sem ilustrações.',
+        estados: [['poravaliar', 'Por avaliar'], ['avaliado', 'Avaliado'], ['devolucaopedida', 'Devolução pedida'], ['analise', 'Em análise'], ['resolvida', 'Resolvida']],
+        decisoes: [
+          { t: 'Cinco flores, não cinco estrelas', d: 'A nota usa a marca: a flor acende em lima. Só aparece depois de um trabalho concluído.' },
+          { t: 'Motivo, prova, resposta', d: 'A devolução mostra as duas versões da história na mesma ordem, sempre. Nada de formulário anónimo.' },
+          { t: 'Prazos em vez de promessas', d: '48h para responder, 24h para analisar. Cada estado diz o que acontece se ninguém agir.' }
+        ]
+      },
+      p11: {
+        id: 'P11', titulo: 'Área do comprador',
+        nota: 'Voltar ao que já se comprou: biblioteca do que está desbloqueado, pedidos por estado, e as conversas. O vazio de quem ainda não comprou nada é um ecrã desenhado, não um espaço em branco.',
+        estados: [['biblioteca', 'Biblioteca'], ['pedidos', 'Pedidos'], ['conversas', 'Conversas'], ['vazio', 'Nunca comprou']],
+        decisoes: [
+          { t: 'Permanente escrito na etiqueta', d: 'Cada item diz se é para sempre ou até uma data. É a dúvida número um de quem paga conteúdo.' },
+          { t: 'Pedido mostra dinheiro e prazo', d: 'Nas linhas de pedidos, o valor e o que falta fazer vêm antes do nome do criador.' },
+          { t: 'Vazio com saída', d: 'A flor apagada, uma frase sobre o que acontece quando comprar, e um botão para descobrir criadores.' }
+        ]
+      },
+      p12: {
+        id: 'P12', titulo: 'Painel do criador',
+        nota: 'O primeiro ecrã de quem vende. O topo é identidade e estado: avatar que leva ao perfil, saudação, o estado do criador com o ponto colorido, e à direita as duas únicas portas que saem do painel — avisos e definições. Abaixo, o dinheiro num cartão lima com levantar e números lado a lado, depois o que exige resposta, as vagas de hoje, e a grelha de seis atalhos operacionais.',
+        estados: [['cheio', 'Dia cheio'], ['calmo', 'Dia calmo'], ['novo', 'Criador novo']],
+        decisoes: [
+          { t: 'Dinheiro primeiro, sempre', d: 'O saldo disponível é o maior número do ecrã, com a tendência do mês ao lado e as duas acções que fazem sentido a partir dele. É a pergunta que o criador traz ao abrir a app.' },
+          { t: 'A grelha é operação, não administração', d: 'Ofertas, Agenda, Carteira, Números, Publicar e Eventos — coisas que se fazem num dia de trabalho. Segurança, plano e conta saíram para as definições: não se mexe nisso entre dois pedidos.' },
+          { t: 'O estado do criador está no topo', d: 'Disponível, Poucas vagas, Pausado ou Ausente — com o ponto lima ou âmbar ao lado da saudação. O criador vê o que o perfil está a dizer sobre ele sem ter de o abrir.' }
+        ]
+      },
+      p13: {
+        id: 'P13', titulo: 'Caixa de entrada',
+        nota: 'Tudo o que chega num sítio: pedidos com prazo, propostas de marca, pagamentos, conversas e mensagens grátis. Abre com três cartões de resumo que respondem antes de se ler uma linha — quantos a decidir, quantos por entregar, quanto está retido — e cada um leva ao filtro ou ecrã correspondente. As linhas com prazo a correr ganham uma barra fina por baixo do assunto.',
+        estados: [['naolidos', 'Não lidos'], ['prazo', 'Por prazo'], ['dinheiro', 'Só dinheiro'], ['gratis', 'Grátis e conversas'], ['vazio', 'Caixa limpa']],
+        decisoes: [
+          { t: 'Resumo antes da lista', d: 'Três números tocáveis no topo. Quem abre a caixa quer saber se há fogo, não ler cabeçalhos — e cada cartão é um atalho para o filtro que o explica.' },
+          { t: 'A barra mostra o prazo a consumir-se', d: 'Uma linha de 3px por baixo do assunto, na cor do estado. O texto diz "faltam 42 min"; a barra diz que já quase não há nada.' },
+          { t: 'Uma linha, quatro informações', d: 'Quem, que tipo, quanto e quando — mais a faixa lateral de cor e o ponto de não lido. Nada precisa de ser aberto para se decidir a ordem de resposta.' }
+        ]
+      },
+      p14: {
+        id: 'P14', titulo: 'Pedido a decidir',
+        nota: 'Quem pede, o quê, por quanto, até quando e com que direitos — e as três saídas na mesma altura do polegar. O lado do criador a decidir um trabalho de marca.',
+        estados: [['decidir', 'A decidir'], ['contraproposta', 'Contraproposta enviada'], ['aceite', 'Aceite'], ['recusado', 'Recusado']],
+        decisoes: [
+          { t: 'Direitos ao mesmo nível do preço', d: 'Âmbito, datas, direitos de uso e exclusividade são linhas fixas, na mesma ordem em todos os pedidos de marca.' },
+          { t: 'Aceitar traz o valor no botão', d: '"Aceitar por 350 000 Kz". Contrapropor é secundário, recusar é texto — nenhuma das três está escondida.' },
+          { t: 'Custo de não responder', d: 'A nota diz que expirar conta na taxa de resposta, e que recusar não conta.' }
+        ]
+      },
+      p15: {
+        id: 'P15', titulo: 'Publicar e montar playlist',
+        nota: 'Começa pelo tipo — foto, vídeo, álbum ou playlist — porque é essa escolha que muda tudo o que vem abaixo: a playlist ganha ordem e prévia gratuita, o álbum ganha tira de itens e um preço só. É também a fila de tipos que leva o criador a "Montar playlist", que antes não tinha porta de entrada. Depois: legenda com contador, visibilidade com preço, etiquetas, pastas, comentários, reacções, aviso a seguidores, guardar sem rede, agendamento e estimativa de alcance.',
+        estados: [['rascunho', 'Foto'], ['video', 'Vídeo'], ['album', 'Álbum'], ['playlist', 'Montar playlist'], ['pasta', 'Nova pasta'], ['carregar', 'A carregar'], ['publicado', 'Publicado'], ['falhado', 'Falhou'], ['agendado', 'Agendada']],
+        ligacoes: 'A fila de tipos tem cinco entradas e a quinta, Evento, sai do P15 para o P31 — publicar um evento não é publicar um ficheiro.',
+        decisoes: [
+          { t: 'Carregar é um estado, não um modal', d: 'A flor a girar, a percentagem, os MB e a promessa de continuar depois — dentro da própria área da média.' },
+          { t: 'Preço junto da visibilidade', d: 'Pública, paga ou só para membros aparecem com o valor à direita; escolher o meio é escolher o preço.' },
+          { t: 'Playlist ordena-se à mão', d: 'Puxadores nas linhas, prévia gratuita marcada a lima, e o vídeo ainda a carregar marcado a âmbar.' },
+          { t: 'A capa escolhe-se', d: 'A tira de média marca qual é a capa a lima; recortar e trocar ficam sobre a própria imagem.' },
+          { t: 'Alcance estimado, não prometido', d: '"40 a 60 desbloqueios, com base nas tuas últimas 8 publicações ao mesmo preço" — e depois de publicar passa a número real.' },
+          { t: 'O tipo é a primeira decisão', d: 'Quatro cartões antes de tudo. Trocar de tipo troca o ecrã inteiro em vez de esconder campos que não servem.' },
+          { t: 'Pastas que o criador inventa', d: 'Bastidores, Tutoriais, Luanda, Só membros — com contagem. Uma pasta nova pode ser visível (vira separador no perfil) ou só para arrumar.' }
+        ]
+      },
+      p16: {
+        id: 'P16', titulo: 'Ofertas: criar e editar',
+        nota: 'A oferta é o produto, por isso tudo nela é editável: preço com atalhos e apoio extra, lista de inclusões que se acrescenta e remove, prazo, vagas e alterações em contadores com pontos, três níveis de direitos de uso com custo, quatro regras de entrada e a política de cancelamento — com a linha da DM pré-visualizada.',
+        estados: [['activa', 'Activa'], ['pausada', 'Pausada'], ['esgotada', 'Esgotada'], ['rascunho', 'Rascunho'], ['consulta', 'Sob consulta']],
+        decisoes: [
+          { t: 'Editar a ver o resultado', d: 'A linha de oferta aparece tracejada no fim do ecrã, igual à da DM. Mudar o preço muda-a ali.' },
+          { t: 'O que o criador recebe', d: 'Abaixo do preço, o valor líquido depois da taxa. Ninguém devia ter de fazer essa conta de cabeça.' },
+          { t: 'Estado muda a acção', d: 'Activa guarda, pausada reactiva, esgotada abre vagas extra, rascunho põe à venda.' },
+          { t: 'Direitos custam dinheiro', d: 'Uso pessoal é o padrão; publicar nas redes tem preço, uso comercial vai a consulta. É onde os criadores se enganam.' },
+          { t: 'Quatro regras de entrada', d: 'Briefing obrigatório, anexos, aceitação automática e só-seguidores. Cada uma reduz pedidos maus ou aumenta volume.' }
+        ]
+      },
+      p17: {
+        id: 'P17', titulo: 'Disponibilidade e agenda',
+        nota: 'Vagas por tipo de oferta com mais e menos, horários de chamada por dia, e a pausa temporária com data de regresso escrita.',
+        estados: [['disponivel', 'Disponível'], ['quase', 'Quase cheio'], ['esgotado', 'Esgotado'], ['pausa', 'Em pausa']],
+        decisoes: [
+          { t: 'Vagas com o polegar', d: 'Mais e menos de 32px em vez de campo numérico — muda-se em segundos entre trabalhos.' },
+          { t: 'A barra avisa antes', d: 'Fica âmbar na última vaga e terracota quando fecha, no próprio cartão da oferta.' },
+          { t: 'Pausa com regresso', d: 'A pausa exige data. O perfil continua visível e quem segue é avisado no dia.' }
+        ]
+      },
+      p18: {
+        id: 'P18', titulo: 'Carteira e levantamento',
+        nota: 'Disponível, retido com a razão de estar retido, histórico com sinal, documentos emitidos e o levantamento para Express — com os estados em que corre mal.',
+        estados: [['saldo', 'Com saldo'], ['sem', 'Sem saldo'], ['validar', 'Em validação'], ['caminho', 'A caminho'], ['falhado', 'Falhado'], ['revertido', 'Revertido'], ['dados', 'Dados em falta']],
+        decisoes: [
+          { t: 'Retido explica-se', d: 'Não basta o número: a frase diz quantos trabalhos o prendem e quando se liberta.' },
+          { t: 'Histórico com sinal', d: 'Entradas em lima, saídas em tinta, devoluções em terracota, taxa em cinzento. Lê-se de relance.' },
+          { t: 'Falha nunca é ambígua', d: 'Cada estado diz onde está o dinheiro e o rodapé confirma que nada foi descontado.' }
+        ]
+      },
+      p19: {
+        id: 'P19', titulo: 'Estatísticas e avaliações recebidas',
+        nota: 'Números que servem para decidir preços: resposta, tempo médio, conversão do perfil, receita por origem — e uma conclusão escrita em vez de um painel bonito e inútil.',
+        estados: [['dados', 'Com dados'], ['semdados', 'Sem dados suficientes']],
+        decisoes: [
+          { t: 'Uma frase que decide', d: 'Debaixo das barras, a leitura: as campanhas dão 59% da receita com 3 trabalhos, logo é aí que o preço sobe.' },
+          { t: 'Sem dados é um estado', d: 'Com poucos trabalhos dizemos que os números não são fiáveis, em vez de mostrar percentagens falsas.' },
+          { t: 'Avaliações com a flor', d: 'A nota recebida usa a mesma flor da avaliação do comprador — o mesmo símbolo nos dois lados.' }
+        ]
+      },
+      p20: {
+        id: 'P20', titulo: 'Centro de controlo',
+        nota: 'Uma app que mistura rede social, mensagens, trabalho pago e dinheiro não cabe num ecrã de switches. As definições passaram a ser um hub com doze áreas, cada uma com o seu estado à vista na lista — "Silêncio das 22h às 07h", "Express 923 000 000 · manual", "Mensal · renova a 12 de Outubro" — e o detalhe uma camada abaixo. No topo fica o selector de modo de utilização: a mesma pessoa é fã, criadora e empresa sem ter três contas.',
+        estados: [['hub', 'Centro de controlo'], ['aparencia', 'Aparência'], ['conta', 'Conta e perfil'], ['privacidade', 'Privacidade'], ['notificacoes', 'Notificações'], ['dm', 'DM e interacções'], ['disponibilidade', 'Disponibilidade'], ['conteudo', 'Conteúdo'], ['eventos', 'Eventos'], ['pagamentos', 'Pagamentos'], ['pro', 'NaDM Pro'], ['seguranca', 'Segurança'], ['ajuda', 'Ajuda e suporte']],
+        decisoes: [
+          { t: 'O estado está na lista, não lá dentro', d: 'Cada linha do hub diz como está configurada. Quem procura uma definição costuma só querer confirmar o valor — e confirma sem entrar.' },
+          { t: 'A única porta é a engrenagem do painel', d: 'As definições não aparecem na barra inferior nem na grelha de atalhos: entram-se pelo ícone no topo do painel. Tudo o que é conta, segurança e plano vive aqui, e só aqui.' },
+          { t: 'Modo de utilização, não três contas', d: 'Tocar no nome troca entre Nayara, Nayara Criadora e Óptica Kilamba, e a barra inferior segue o modo. É o que resolve a confusão de contextos sem multiplicar logins.' },
+          { t: 'Tema segue o sistema por omissão', d: 'Sistema, Claro ou Escuro — e o claro não é o escuro invertido: fundo off-white esverdeado, cartões brancos, lima só para acção, contornos verde-cinza. A marca lê-se igual nos dois.' },
+          { t: 'Estado do criador em vez de silêncio', d: 'Disponível, Poucas vagas, Pausado, Ausente até 28 Set — cada um com a frase que aparece no perfil. Dizer que estás fora é melhor do que deixar as ofertas desaparecerem.' }
+        ]
+      },
+      p21: {
+        id: 'P21', titulo: 'Entrar e criar conta',
+        nota: 'Cinco formas de entrar, ordenadas por onde o público já está: Instagram primeiro, número angolano em segundo, TikTok, Facebook e Google abaixo. Entrar e criar conta são o mesmo acto.',
+        estados: [['escolher', 'Escolher método'], ['numero', 'Número'], ['codigo', 'Código SMS'], ['errado', 'Código errado'], ['enviando', 'A confirmar'], ['instagram', 'A ligar Instagram'], ['ligado', 'Conta ligada'], ['recusado', 'Ligação recusada']],
+        decisoes: [
+          { t: 'Instagram em primeiro', d: 'O produto nasce na DM do Instagram — é de lá que vem o público e a foto. Fica na pílula lima, sozinho.' },
+          { t: 'O número é igual em peso', d: 'Muita gente em Angola é primeiro telefone. Fica em contorno sólido logo abaixo, com +244 fixo e teclado numérico próprio.' },
+          { t: 'Promessa antes do botão', d: 'A caixa com cadeado diz que não publicamos nada nem lemos mensagens. É a objecção número um de quem liga contas sociais.' }
+        ]
+      },
+      p22: {
+        id: 'P22', titulo: 'Criação de perfil',
+        nota: 'Sete passos, porque a lógica exige sete: tipo de conta, link, foto, nome e bio, primeira oferta, onde receber o dinheiro, identidade e avisos. Sem oferta ninguém consegue encomendar; sem número Express ninguém consegue ser pago. Quem só compra faz três passos.',
+        estados: [['tipo', 'Vender ou comprar'], ['link', 'Link livre'], ['ocupado', 'Link ocupado'], ['foto', 'Foto'], ['perfil', 'Nome e bio'], ['oferta', 'Primeira oferta'], ['recebimento', 'Onde recebo'], ['identidade', 'Identidade'], ['analise', 'Em análise'], ['recusado', 'BI recusado'], ['reenviar', 'Falta a selfie'], ['bloqueado', 'Verificação suspensa'], ['notificacoes', 'Avisos'], ['pronto', 'Perfil criado'], ['comprador', 'Quem só compra'], ['compradorpronto', 'Comprador pronto']],
+        decisoes: [
+          { t: 'O link é o passo importante', d: 'Não é um campo de registo: é o endereço que vai para a bio. Mostra-se logo abaixo, completo, com a flor ao lado.' },
+          { t: 'Ocupado com saídas', d: 'Quando o nome está tomado, três alternativas em pílulas e a acção principal apagada até resolver.' },
+          { t: 'Identidade explicada', d: 'BI e selfie com a razão escrita: serve para pagar e nunca aparece no perfil. Dá para continuar enquanto está em análise.' },
+          { t: 'A oferta faz parte do registo', d: 'Três sugestões com preço, a mais fácil de entregar em primeiro, e a pré-visualização da linha que aparece na DM.' },
+          { t: 'Dois caminhos, não um', d: 'Quem só compra não tem perfil público nem documento: nome, avisos e está dentro.' }
+        ]
+      },
+      p23: {
+        id: 'P23', titulo: 'O criador entrega o trabalho',
+        nota: 'O contraponto do P9: o mesmo pedido visto por quem tem de o fazer. Aceitar ou recusar, o briefing com os anexos, gravar ou escolher o ficheiro, entregar — e o prazo sempre à vista com o valor que vai receber.',
+        estados: [['decidir', 'Pedido novo'], ['gravar', 'Por gravar'], ['pronto', 'Ficheiro pronto'], ['carregar', 'A enviar'], ['entregue', 'Entregue'], ['alteracao', 'Alteração pedida'], ['recusar', 'A recusar']],
+        decisoes: [
+          { t: 'Prazo e pagamento no mesmo cartão', d: 'Quanto falta e quanto recebe, lado a lado. Fica lima quando corre bem, âmbar quando o prazo aperta, terracota quando vai devolver.' },
+          { t: 'O briefing é intocável', d: 'O texto do fã aparece verbatim com os anexos que enviou. É contra isto que se grava.' },
+          { t: 'Recusar não é castigo', d: 'A recusa pede motivo e diz que não conta na taxa de resposta — é o que evita entregas más feitas a correr.' }
+        ]
+      },
+      p24: {
+        id: 'P24', titulo: 'Marcar a chamada',
+        nota: 'A oferta de chamada prometia "marcas o horário" e não havia onde. Dias com marca de disponibilidade, horários em duas colunas, resumo com fuso e a regra de faltas antes de pagar.',
+        estados: [['escolher', 'A escolher'], ['escolhido', 'Horário escolhido'], ['semvagas', 'Semana cheia'], ['confirmada', 'Marcação confirmada']],
+        decisoes: [
+          { t: 'Só os horários que existem', d: 'A grelha vem da disponibilidade do P17. Dias passados e cheios ficam a 50% e não são tocáveis.' },
+          { t: 'Pagar só depois de escolher', d: 'A acção principal fica apagada até haver dia e hora. Não se paga uma chamada sem hora.' },
+          { t: 'As faltas ditas antes', d: 'Desmarcar até 24h antes sem custo; se o criador faltar, devolução automática. Escrito antes do pagamento, não depois.' }
+        ]
+      },
+      p25: {
+        id: 'P25', titulo: 'O início de quem compra',
+        nota: 'O comprador entrava sempre por um link. Aqui tem casa: os pedidos em curso em primeiro, em cartões com prazo e barra de progresso, e só depois o feed de quem segue. Publicação paga aparece fechada com o preço, não escondida.',
+        estados: [['cheio', 'Com pedidos'], ['pedidos', 'Só pedidos'], ['gratis', 'Só grátis'], ['vazio', 'Sem seguir']],
+        decisoes: [
+          { t: 'O que já pagaste vem primeiro', d: 'Um pedido a decorrer vale mais que uma publicação nova. A tira horizontal mostra estado, prazo e progresso sem abrir nada.' },
+          { t: 'O cadeado diz o preço', d: 'Fechado mostra o valor no meio da imagem. Quem não quer pagar percebe logo; quem quer, toca uma vez.' },
+          { t: 'Vazio é um convite', d: 'Sem ninguém seguido, o ecrã manda descobrir em vez de mostrar uma lista vazia.' }
+        ]
+      },
+      p26: {
+        id: 'P26', titulo: 'Descobrir e procurar',
+        nota: 'Procura por nome, categoria ou cidade, com filtros que importam em Angola: responde hoje, até 10 000 Kz, Luanda, faz vídeo, aceita marcas. Cada resultado mostra tempo de resposta, trabalhos feitos e preço mínimo.',
+        estados: [['inicial', 'Antes de procurar'], ['resultados', 'Com resultados'], ['categoria', 'Por categoria'], ['semresultado', 'Sem resultados']],
+        decisoes: [
+          { t: 'Tempo de resposta é o ranking', d: '"Responde em 4h" a lima, "em 1 dia" a cinzento, "em pausa" a âmbar. É o que distingue um perfil vivo de um abandonado.' },
+          { t: 'O preço mínimo à vista', d: '"desde 3 500 Kz" evita abrir quatro perfis para descobrir que nenhum cabe no orçamento.' },
+          { t: 'Categorias antes da caixa de texto', d: 'Quem não sabe o que procurar toca numa das seis. Quem sabe, escreve.' }
+        ]
+      },
+      p27: {
+        id: 'P27', titulo: 'Avisos',
+        nota: 'O centro do que tem prazo. Faixa de cor por urgência, botão de acção dentro do aviso que aterra no ecrã certo, e filtros por natureza: tudo, com prazo, dinheiro.',
+        estados: [['tudo', 'Tudo'], ['prazo', 'Com prazo'], ['dinheiro', 'Dinheiro'], ['vazio', 'Tudo lido']],
+        decisoes: [
+          { t: 'Aviso com acção, não só texto', d: '"Abrir pedido" dentro do cartão vermelho. Um aviso de prazo sem botão é uma culpa sem saída.' },
+          { t: 'Cor por urgência, não por tipo', d: 'Terracota para o que expira, lima para dinheiro e elogios, cinzento para sistema.' },
+          { t: 'Marcar lidos num toque', d: 'Sem selecção múltipla escondida atrás de um long-press.' }
+        ]
+      },
+      p28: {
+        id: 'P28', titulo: 'Mensagens fora da app',
+        nota: 'O que a NaDM envia quando a app está fechada: aviso no ecrã bloqueado, SMS e recibo por email. Os três dizem valor e prazo — é a regra que os torna úteis.',
+        estados: [['push', 'Aviso no ecrã'], ['sms', 'SMS'], ['email', 'Recibo']],
+        decisoes: [
+          { t: 'SMS sem acentos e abaixo de 160', d: 'Chega inteiro em qualquer telemóvel angolano, sem partir em dois nem virar caracteres estranhos.' },
+          { t: 'Valor e prazo sempre', d: '"18 000 Kz, aceitas até às 20h" — sem isso não vale a pena interromper ninguém.' },
+          { t: 'O recibo diz a devolução', d: 'Escrito no email: se nada for entregue até 21 de Setembro, o dinheiro volta. É o que faz um desconhecido pagar adiantado.' }
+        ]
+      },
+      p29: {
+        id: 'P29', titulo: 'A adesão mensal',
+        nota: 'A app falava em "só para membros" e "adesão mensal de 9 000 Kz" em dois ecrãs sem nunca haver onde ser membro. Aqui está o ciclo inteiro: a oferta, o pagamento, a adesão activa com a renovação à vista, o cancelamento com o que se perde, e a expirada com o conteúdo outra vez fechado.',
+        estados: [['oferta', 'Não é membro'], ['pagar', 'A pagar'], ['activa', 'Activa'], ['atraso', 'Em atraso'], ['tolerancia', 'Tolerância'], ['cancelar', 'A cancelar'], ['expirada', 'Expirada']],
+        decisoes: [
+          { t: 'Adesão não é pedido', d: 'Sem prazo e sem entrega: é acesso enquanto se for membro. Está escrito na nota, porque é a confusão mais fácil de fazer.' },
+          { t: 'O que se perde, riscado', d: 'Na expirada e no cancelamento a lista de benefícios ganha cadeados e traço por cima. Mostrar a perda é mais honesto que esconder.' },
+          { t: 'Cancelar não apaga o comprado', d: '"O que compraste à parte é teu para sempre" — só o conteúdo de membro fecha, e só na data já paga.' },
+          { t: 'Falhar a cobrança não é cancelar', d: 'Em atraso a app tenta a 21 e a 24; a tolerância dá sete dias de acesso enquanto isso. Só depois é que fecha. Escrito com a data exacta em que o acesso acaba.' }
+        ]
+      },
+      p30: {
+        id: 'P30', titulo: 'Partilhar o link',
+        nota: 'O P22 acabava com "põe o link na bio" e não havia ecrã. Aqui o link é um cartão lima com copiar e código, a lista dos quatro sítios onde ele tem de estar com o estado de cada um, e as visitas da semana com a taxa de conversão.',
+        estados: [['cartao', 'Cartão do link'], ['copiado', 'Link copiado'], ['qr', 'Código para mostrar'], ['visitante', 'Visitante partilha'], ['visitantecopiado', 'Visitante copiou']],
+        decisoes: [
+          { t: 'Uma lista de sítios, não um botão', d: 'Instagram, TikTok, estado do WhatsApp e código impresso, cada um com "Feito" ou "Pôr agora". A distribuição é trabalho, não um toque.' },
+          { t: 'O código serve quem vende em pessoa', d: 'Salão, loja, evento: imprime-se e funciona sem explicar nada. É o canal que a app não controla.' },
+          { t: 'Quem visita também partilha', d: 'A versão de visitante troca "onde pôr o link" por "onde partilhar" e esconde as visitas — esse número é dela, não de quem partilha. Acaba em "Criar o meu NaDM".' },
+          { t: 'Visitas com conversão', d: '1 284 visitas e 94 pedidos, "1 em cada 13". O número sozinho não diz se o link está a funcionar.' }
+        ]
+      },
+      p31: {
+        id: 'P31', titulo: 'Evento do lado do criador',
+        nota: 'A NaDM vendia tempo e ficheiros mas não vendia lugares. Aqui o evento tem ciclo inteiro: rascunho editável, bilhetes à venda por escalão com barra de esgotamento, lotação cheia com lista de espera, o dia do evento com o leitor à porta, o fim com quem entrou e quem não veio, e o cancelamento que devolve tudo.',
+        estados: [['rascunho', 'Rascunho'], ['venda', 'À venda'], ['esgotado', 'Esgotado'], ['hoje', 'É hoje'], ['terminado', 'Terminado'], ['cancelado', 'Cancelado']],
+        decisoes: [
+          { t: 'A data fecha com a primeira venda', d: 'Antes disso edita-se tudo. Depois, mudar a data é quebrar um contrato com quem já pagou — o ecrã diz isso no rascunho, não depois.' },
+          { t: 'Retido até 24h depois', d: 'O dinheiro dos bilhetes só se liberta um dia depois do evento. É o que protege quem comprou se nada acontecer.' },
+          { t: 'Quem não veio não é reembolsado', d: 'Escrito no ecrã do fim, com o número: 36 entraram, 4 faltaram. A regra estava na compra.' }
+        ]
+      },
+      p32: {
+        id: 'P32', titulo: 'O bilhete de quem compra',
+        nota: 'Três escalões com o que resta de cada um, quantidade com limite de 4, e a conta com a taxa dos dois lados antes de pagar. Depois o bilhete é um cartão lima com código, que fica cinzento quando é usado ou quando o evento cai.',
+        estados: [['escolher', 'A escolher'], ['bilhete', 'Bilhete válido'], ['usado', 'Já entrou'], ['cancelado', 'Evento cancelado']],
+        decisoes: [
+          { t: 'O bilhete muda de cor quando morre', d: 'Lima enquanto vale, cinzento depois de usado ou cancelado. Não é preciso ler para perceber.' },
+          { t: 'Funciona sem rede', d: 'O código está no ecrã e pode ir para a galeria. Um evento em Talatona não se faz refém do 4G.' },
+          { t: 'Cancelamento não pede nada', d: 'A devolução é total, taxa incluída, e o ecrã diz quando chega. Ninguém tem de escrever a pedir.' }
+        ]
+      },
+      p33: {
+        id: 'P33', titulo: 'NaDM Pro',
+        nota: 'A app tinha preço livre e escalões fixos ao mesmo tempo, sem dizer o que separava um do outro. O Pro é essa linha: no grátis o preço vem de uma lista de quatro escalões e a criadora paga 5%; no Pro escreve o número que quiser e a taxa dela cai a zero. A do comprador nunca muda.',
+        estados: [['oferta', 'Plano grátis'], ['anual', 'Anual'], ['bloqueio', 'Preço bloqueado'], ['pagar', 'A pagar'], ['activo', 'É Pro'], ['cancelar', 'A sair']],
+        decisoes: [
+          { t: 'A porta está onde o muro estava', d: 'A fila de preços do P15 e do P16 acaba num "Outro valor" tracejado a âmbar que abre este ecrã. O Pro deixa de ser um destino isolado e passa a aparecer no momento em que é preciso.' },
+          { t: 'Custo medido em trabalhos', d: '"Recuperas o custo com 14 vídeos entregues no mês" — o plano compara-se com o que ela já faz, não com uma tabela abstracta.' },
+          { t: 'Sair não apaga', d: 'Os preços acima dos escalões voltam a rascunho em vez de descerem sozinhos. Ninguém acorda a vender mais barato do que decidiu.' }
+        ]
+      },
+      p34: {
+        id: 'P34', titulo: 'Workspace da marca',
+        nota: 'As campanhas de 350 000 Kz apareciam na caixa da criadora e no P14, mas do outro lado não havia ninguém — a empresa não tinha onde estar. Aqui tem: campanhas a decorrer com progresso por peça, proposta a vários criadores de uma vez, equipa com papéis separados e facturação com NIF.',
+        estados: [['campanhas', 'Campanhas'], ['nova', 'Nova campanha'], ['equipa', 'Equipa'], ['facturacao', 'Facturação']],
+        decisoes: [
+          { t: 'Quem vê não liberta dinheiro', d: 'Três papéis: aprova, cria, vê. A separação é o que evita que o estagiário aceite uma campanha de 350 mil por engano.' },
+          { t: 'Proposta é compromisso', d: 'Enviar três propostas é aceitar pagar as três se as três disserem que sim. O ecrã diz isso antes de enviar, não depois.' },
+          { t: 'A taxa em linha própria', d: 'A factura separa o valor do trabalho da taxa da NaDM, porque a contabilidade da empresa precisa de as lançar em contas diferentes.' }
+        ]
+      },
+      p35: {
+        id: 'P35', titulo: 'Denunciar, bloquear, recorrer',
+        nota: 'A app pedia às pessoas que confiassem em desconhecidos com dinheiro pelo meio e não tinha onde reclamar. Cinco ecrãs fecham o ciclo: denúncia com motivo, bloqueio com o que muda listado, denúncia em análise com cronologia, o perfil suspenso do lado de quem apanha a suspensão, e o recurso.',
+        estados: [['denunciar', 'Denunciar'], ['bloquear', 'Bloquear'], ['enviada', 'Em análise'], ['suspenso', 'Perfil suspenso'], ['recurso', 'Recurso']],
+        decisoes: [
+          { t: 'Denunciar não é bloquear', d: 'São duas coisas, com ecrãs separados e uma ponte entre elas. Juntá-las fazia com que quem só queria silêncio acusasse sem querer.' },
+          { t: 'A suspensão mostra-se de dentro', d: 'Quem é suspenso vê o que fechou, o que continua, e que o dinheiro já ganho não se perde. É a diferença entre uma sanção e um sequestro.' },
+          { t: 'Recurso revisto por outra pessoa', d: 'Escrito no ecrã. Sem isso, recorrer é pedir a quem decidiu que mude de ideias.' }
+        ]
+      },
+      p36: {
+        id: 'P36', titulo: 'Centro de segurança',
+        nota: 'Uma conta que guarda dinheiro precisa de mais do que uma palavra-passe. Sessões abertas por aparelho com quem é este, entrada desconhecida com o botão de fechar tudo, código de seis dígitos, e a recuperação para quem perdeu o número e o Instagram ao mesmo tempo.',
+        estados: [['sessoes', 'Sessões abertas'], ['alerta', 'Entrada desconhecida'], ['codigo', 'Código'], ['recuperar', 'Recuperar acesso']],
+        decisoes: [
+          { t: 'O alerta traz a acção', d: '"Não fui eu — fechar tudo" é um só toque que termina as sessões e trava o dinheiro. Um aviso sem botão é um susto sem saída.' },
+          { t: 'Travar é proteger', d: 'Durante a recuperação ninguém levanta — nem a dona, nem quem entrou. Dito assim, o incómodo percebe-se.' },
+          { t: 'O BI serve duas vezes', d: 'Quem passou na verificação de identidade pode recuperar por aí. O documento que abriu a carteira é o mesmo que a reabre.' }
+        ]
+      },
+      p37: {
+        id: 'P37', titulo: 'Mimar',
+        nota: 'A DM oferecia "Apoio livre — desde 1 000 Kz, sem entrega" e abria o briefing de um pedido de vídeo: pedia prazo, tom e anexos para uma coisa que não se entrega. O mimo passou a ter ecrã próprio, e é o mesmo que serve o botão Mimar nas fotos, vídeos e playlists do feed.',
+        estados: [['escolher', 'Apoio livre'], ['foto', 'A partir de uma foto'], ['pagar', 'A confirmar'], ['feito', 'Enviado']],
+        decisoes: [
+          { t: 'Mimar não é encomendar', d: 'Está escrito no ecrã: sem prazo, sem entrega, sem alterações. É a única transacção da NaDM onde ninguém deve nada a ninguém depois do pagamento.' },
+          { t: 'Seis valores e um sentido', d: 'De 1 000 a 50 000 Kz, com 5 000 marcado como o mais escolhido. A frase por baixo do número muda com o valor — "todo o apoio conta" até "é muito dinheiro em Luanda".' },
+          { t: 'Público ou só para ela', d: 'Quem mima escolhe se o nome e a palavra ficam visíveis por baixo do trabalho. A conta continua a mostrar os quatro números da taxa, como em todo o resto.' }
+        ]
+      }
+    };
+    const m = meta[st.screen];
+
+    const setScreen = s => this.setState({ screen: s, sheet: null });
+    const setVariant = v => this.setState(p => ({ variants: { ...p.variants, [p.screen]: v }, sheet: null }));
+
+    return {
+      screen: st.screen, variant, tab: st.tab, sheet: st.sheet,
+      mostrarClaro: this.props.mostrarClaro !== false,
+      ecraId: m.id, ecraTitulo: m.titulo, ecraNota: m.nota, decisoes: m.decisoes,
+      ecras: [['p1', 'P1 · Perfil'], ['p2', 'P2 · Publicação'], ['p3', 'P3 · Playlist'], ['p4', 'P4 · DM'], ['p5', 'P5 · Conversa'], ['p6', 'P6 · Briefing'], ['p7', 'P7 · Express'], ['p8', 'P8 · Pedido criado'], ['p9', 'P9 · Entrega'], ['p10', 'P10 · Avaliação'], ['p11', 'P11 · Comprador'], ['p12', 'P12 · Painel'], ['p13', 'P13 · Caixa'], ['p14', 'P14 · Decidir'], ['p15', 'P15 · Publicar'], ['p16', 'P16 · Ofertas'], ['p17', 'P17 · Agenda'], ['p18', 'P18 · Carteira'], ['p19', 'P19 · Números'], ['p20', 'P20 · Definições'], ['p21', 'P21 · Entrar'], ['p22', 'P22 · Criar perfil'], ['p23', 'P23 · Entregar'], ['p24', 'P24 · Marcar chamada'], ['p25', 'P25 · Início'], ['p26', 'P26 · Descobrir'], ['p27', 'P27 · Avisos'], ['p28', 'P28 · Mensagens'], ['p29', 'P29 · Ser membro'], ['p30', 'P30 · Partilhar link'], ['p31', 'P31 · Evento (criador)'], ['p32', 'P32 · Bilhete (fã)'], ['p33', 'P33 · NaDM Pro'], ['p34', 'P34 · Marca'], ['p35', 'P35 · Denúncia'], ['p36', 'P36 · Segurança'], ['p37', 'P37 · Mimar']].map(([k, label]) => ({
+        label, style: st.screen === k ? tabOn : tabOff, pick: () => setScreen(k)
+      })),
+      estados: m.estados.map(([k, label]) => ({ label, style: variant === k ? chipOn : chipOff, pick: () => setVariant(k) })),
+      onNav: (screen, v) => this.setState(p => ({
+        screen, sheet: null,
+        variants: v ? { ...p.variants, [screen]: v } : p.variants
+      })),
+      onTab: t => this.setState({ tab: t }),
+      reaccao: st.reaccao, motivo: st.motivo,
+      onReaccao: r => this.setState({ reaccao: r }),
+      onMotivo: mo => this.setState({ motivo: mo }),
+      onSheet: o => this.setState({ sheet: o }),
+      coresEscuro: [
+        ['Fundo', '#16281e'], ['Superfície', '#20372a'], ['Superfície 2', '#2b4736'],
+        ['Tinta', '#f6f8f3'], ['Lima — dinheiro e agora', '#e1f83b'], ['Âmbar — prazo a correr', '#e6a24a'], ['Terracota — falhou', '#e2623c']
+      ].map(([nome, hex]) => ({ nome, hex, chip: "width:26px;height:26px;border-radius:9px;flex:none;border:1px solid rgba(246,248,243,.18);background:" + hex })),
+      coresClaro: [
+        ['Fundo', '#eef2e6'], ['Superfície', '#ffffff'], ['Superfície 2', '#e2e8d6'],
+        ['Tinta', '#15261c'], ['Lima — só preenchimento', '#cbe524'], ['Lima-folha — texto e ícones', '#4a7a12'], ['Âmbar — prazo a correr', '#9c5a18'], ['Terracota — falhou', '#b13520']
+      ].map(([nome, hex]) => ({ nome, hex, chip: "width:26px;height:26px;border-radius:9px;flex:none;border:1px solid rgba(246,248,243,.18);background:" + hex })),
+      espacos: [4, 8, 12, 16, 24, 32].map(v => ({ v, bar: "width:18px;border-radius:6px;background:#e1f83b;opacity:.85;height:" + (v * 2 + 6) + "px" })),
+      movimento: [
+        { nome: 'Toque', uso: 'pressão de botão e linha', valor: '140ms' },
+        { nome: 'Entrada', uso: 'cartões e blocos a subir', valor: '400ms' },
+        { nome: 'Folha inferior', uso: 'sobe com mola, desce a direito', valor: '340ms' },
+        { nome: 'Carimbo de estado', uso: 'só quando o pedido muda de verdade', valor: '550ms' },
+        { nome: 'Espera', uso: 'flor a girar enquanto dependemos do banco', valor: '2,4s em ciclo' }
+      ],
+      componentes: [
+        { nome: 'Selo de estado', regra: 'Uma palavra em pílula. Lima quando corre bem, âmbar quando o prazo conta, terracota quando falhou. Carimba-se ao mudar; nunca aparece duas vezes no mesmo bloco.' },
+        { nome: 'Valor', regra: 'Kwanzas em peso 1000 com espaço de milhares. Nunca abreviar, nunca esconder taxa. O preço fica sempre encostado à acção que o cobra.' },
+        { nome: 'Prazo', regra: 'Texto mais barra. A barra mostra quanto já passou, não quanto falta ao acaso. Se expira, muda de cor em vez de desaparecer.' },
+        { nome: 'Véu', regra: 'O conteúdo fechado: desfoque, flor e preço. Mostra o que existe por baixo; não tapa com cor cheia nem inventa cadeados.' },
+        { nome: 'Pedido vivo', regra: 'Cartão com número, tipo, valor, estado e prazo. Vive dentro do fio da conversa, nunca numa página só dele.' },
+        { nome: 'Linha de conversa', regra: 'Bolha lima para quem paga, superfície para o criador, raio quebrado no canto de origem. Máximo 255px de largura.' },
+        { nome: 'Linha de oferta', regra: 'Nome e prazo à esquerda, preço e vagas à direita, ponto de estado no início. Esgotada perde opacidade mas continua visível.' },
+        { nome: 'Tira de confiança', regra: 'Cartões roláveis com etiqueta pequena e número grande. Só factos verificáveis; nada de medalhas decorativas.' },
+        { nome: 'Acção principal', regra: 'Pílula lima de 56px, uma por ecrã, sempre no terço inferior. A alternativa fica em contorno logo abaixo.' },
+        { nome: 'Folha inferior', regra: 'Todas as escolhas e menus. Sobe com mola, tem puxador, fecha por fundo. Substitui qualquer dropdown.' },
+        { nome: 'Campo de texto', regra: 'Pílula de 44 a 48px com botão de anexo fora. Assume teclado aberto: a folha e as acções sobem com ele.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

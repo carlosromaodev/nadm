@@ -1,0 +1,807 @@
+// Esquema da fatia F1 — o ciclo completo com pagamento simulado.
+// Ver docs/plano.md §F1 para o que fica de fora e docs/sdd.md §8 para o modelo final.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────── 001 identity
+
+enum Role {
+  FAN
+  CREATOR
+  BRAND_MEMBER
+  BRAND_OWNER
+  ADMIN
+  SUPPORT
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum VerificationLevel {
+  NONE
+  PHONE
+  IDENTITY
+}
+
+enum AccountType {
+  INDIVIDUAL
+  BRAND
+}
+
+model User {
+  id                String            @id @default(uuid()) @db.Uuid
+  phone             String            @unique
+  email             String?           @unique
+  displayName       String            @map("display_name")
+  roles             Role[]
+  status            UserStatus        @default(ACTIVE)
+  /// Porquê e quando a conta foi suspensa. Nunca se apaga: é prova do acto.
+  suspendedAt       DateTime?         @map("suspended_at") @db.Timestamptz(3)
+  suspensionReason  String?           @map("suspension_reason")
+  verificationLevel VerificationLevel @default(NONE) @map("verification_level")
+  createdAt         DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime          @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  accounts   Account[]
+  profile    Profile?
+  deals                 Deal[]                 @relation("DealBuyer")
+  messages              Message[]
+  counterOffers         DealCounterOffer[]
+  identityVerifications IdentityVerification[] @relation("IdentitySubject")
+  identityReviews       IdentityVerification[] @relation("IdentityReviewer")
+  payoutsRequested      Payout[]               @relation("PayoutRequester")
+  payoutsReviewed       Payout[]               @relation("PayoutReviewer")
+  disputesOpened        Dispute[]              @relation("DisputeOpener")
+  disputesDecided       Dispute[]               @relation("DisputeDecider")
+  findingsResolved      ReconciliationFinding[] @relation("FindingResolver")
+  notifications         NotificationDelivery[]
+  auditLogs             AuditLog[]
+
+  @@map("users")
+}
+
+model Account {
+  id          String      @id @default(uuid()) @db.Uuid
+  type        AccountType
+  legalName   String?     @map("legal_name")
+  taxId       String?     @map("tax_id")
+  ownerUserId String      @map("owner_user_id") @db.Uuid
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime    @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  owner User   @relation(fields: [ownerUserId], references: [id])
+  deals Deal[]
+
+  @@unique([taxId])
+  @@index([ownerUserId])
+  @@map("accounts")
+}
+
+// ─────────────────────────────────────────────────── 002 profiles + offers
+
+enum AvailabilityStatus {
+  AVAILABLE
+  NO_SLOTS
+  PAUSED
+}
+
+model Profile {
+  id                 String             @id @default(uuid()) @db.Uuid
+  userId             String             @unique @map("user_id") @db.Uuid
+  handle             String             @unique
+  displayName        String             @map("display_name")
+  bio                String?
+  settings           Json               @default("{}")
+  availabilityStatus AvailabilityStatus @default(AVAILABLE) @map("availability_status")
+  publishedAt        DateTime?          @map("published_at") @db.Timestamptz(3)
+  createdAt          DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt          DateTime           @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  user    User                 @relation(fields: [userId], references: [id])
+  offers  Offer[]
+  deals   Deal[]
+  wallet  Wallet?
+  payouts Payout[]
+  windows AvailabilityWindow[]
+
+  @@index([availabilityStatus, publishedAt])
+  @@map("profiles")
+}
+
+enum OfferKind {
+  DIRECT_MESSAGE
+  CONTENT_UNLOCK
+  MEMBERSHIP
+  CUSTOM_SERVICE
+  BOOKING
+}
+
+enum OfferStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+model Offer {
+  id                String      @id @default(uuid()) @db.Uuid
+  profileId         String      @map("profile_id") @db.Uuid
+  kind              OfferKind
+  title             String
+  description       String?
+  priceMinor        BigInt      @map("price_minor")
+  currency          String      @db.Char(3)
+  slaHours          Int         @map("sla_hours")
+  revisionsIncluded Int         @default(1) @map("revisions_included")
+  requiresBrief     Boolean     @default(true) @map("requires_brief")
+  /// A publicação que esta oferta desbloqueia, nas ofertas `CONTENT_UNLOCK`.
+  /// É criada pelo sistema quando o criador publica conteúdo pago, e não pelo
+  /// criador a mão — o preço é o da publicação.
+  contentItemId     String?     @unique @map("content_item_id") @db.Uuid
+  status            OfferStatus @default(ACTIVE)
+  createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime    @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  profile Profile             @relation(fields: [profileId], references: [id])
+  deals   Deal[]
+  windows AvailabilityWindow[]
+
+  @@index([profileId, status])
+  @@map("offers")
+}
+
+/// Uma janela de marcação de uma oferta `BOOKING`, com as vagas que tem.
+///
+/// Janelas da mesma oferta **não se sobrepõem**, garantido por `EXCLUDE` com
+/// `btree_gist` na migração 018 — o Prisma não sabe exprimir a restrição.
+model AvailabilityWindow {
+  id         String   @id @default(uuid()) @db.Uuid
+  profileId  String   @map("profile_id") @db.Uuid
+  offerId    String   @map("offer_id") @db.Uuid
+  startsAt   DateTime @map("starts_at") @db.Timestamptz(3)
+  endsAt     DateTime @map("ends_at") @db.Timestamptz(3)
+  slotsTotal Int      @map("slots_total")
+  slotsTaken Int      @default(0) @map("slots_taken")
+  timezone   String   @default("Africa/Luanda")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  profile Profile @relation(fields: [profileId], references: [id])
+  offer   Offer   @relation(fields: [offerId], references: [id])
+  deals   Deal[]
+
+  @@index([offerId, startsAt])
+  @@index([profileId, startsAt])
+  @@map("availability_windows")
+}
+
+// ──────────────────────────────────────────── 003 deals + conversa + entrega
+
+enum DealStatus {
+  PROPOSED
+  COUNTER_OFFERED
+  ACCEPTED
+  IN_PROGRESS
+  DELIVERED
+  APPROVED
+  PAID
+  DECLINED
+  REFUNDED
+  EXPIRED
+}
+
+enum EscrowStatus {
+  PENDING
+  HELD
+  RELEASED
+  REFUNDED
+  FAILED
+}
+
+model Deal {
+  id               String       @id @default(uuid()) @db.Uuid
+  reference        String       @unique
+  buyerUserId      String       @map("buyer_user_id") @db.Uuid
+  buyerAccountId   String       @map("buyer_account_id") @db.Uuid
+  creatorProfileId String       @map("creator_profile_id") @db.Uuid
+  offerId          String       @map("offer_id") @db.Uuid
+  /// A janela reservada, nas ofertas `BOOKING`. Guardada para a vaga poder ser
+  /// devolvida quando o pedido morre sem chegar a trabalho (T3, T6, T13).
+  windowId         String?      @map("window_id") @db.Uuid
+  offerSnapshot    Json         @map("offer_snapshot")
+  status           DealStatus   @default(PROPOSED)
+  escrowStatus     EscrowStatus @default(PENDING) @map("escrow_status")
+  amountMinor      BigInt       @map("amount_minor")
+  platformFeeMinor BigInt       @map("platform_fee_minor")
+  creatorNetMinor  BigInt       @map("creator_net_minor")
+  currency         String       @db.Char(3)
+  brief            String?
+  dueAt            DateTime?    @map("due_at") @db.Timestamptz(3)
+  expiresAt        DateTime?    @map("expires_at") @db.Timestamptz(3)
+  acceptedAt       DateTime?    @map("accepted_at") @db.Timestamptz(3)
+  deliveredAt      DateTime?    @map("delivered_at") @db.Timestamptz(3)
+  approvedAt       DateTime?    @map("approved_at") @db.Timestamptz(3)
+  settledAt        DateTime?    @map("settled_at") @db.Timestamptz(3)
+  /// Quando o negócio fechou, por qualquer das saídas terminais. É daqui que
+  /// conta o período de graça em que a conversa ainda aceita mensagens.
+  closedAt         DateTime?    @map("closed_at") @db.Timestamptz(3)
+  /// Entregas rejeitadas pelo comprador até agora (RN-044).
+  revisionCount    Int          @default(0) @map("revision_count")
+  lastMessageAt    DateTime?    @map("last_message_at") @db.Timestamptz(3)
+  createdAt        DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  buyer          User                @relation("DealBuyer", fields: [buyerUserId], references: [id])
+  buyerAccount   Account             @relation(fields: [buyerAccountId], references: [id])
+  creatorProfile Profile             @relation(fields: [creatorProfileId], references: [id])
+  offer          Offer               @relation(fields: [offerId], references: [id])
+  window         AvailabilityWindow? @relation(fields: [windowId], references: [id])
+  messages       Message[]
+  deliveries     Delivery[]
+  counterOffers  DealCounterOffer[]
+  disputes       Dispute[]
+  paymentIntents PaymentIntent[]
+  ledgerEntries  LedgerTransaction[]
+
+  @@index([creatorProfileId, status, createdAt(sort: Desc)])
+  @@index([buyerUserId, status])
+  @@index([status, expiresAt])
+  /// Os varrimentos de prazo usam índices **parciais**, que o Prisma não sabe
+  /// exprimir: ver `deals_expiry_sweep_idx` e `deals_auto_approval_idx` na
+  /// migração 012. Varrer só as linhas por decidir é o que mantém a tarefa
+  /// barata quando a tabela crescer.
+  @@map("deals")
+}
+
+enum DisputeStatus {
+  OPEN
+  RESOLVED
+  WITHDRAWN
+}
+
+enum DisputeResolution {
+  BUYER
+  CREATOR
+}
+
+/// A saída quando as partes discordam. Enquanto está aberta, a libertação do
+/// escrow fica travada (RN-048).
+model Dispute {
+  id              String             @id @default(uuid()) @db.Uuid
+  dealId          String             @map("deal_id") @db.Uuid
+  openedByUserId  String             @map("opened_by_user_id") @db.Uuid
+  reason          String
+  status          DisputeStatus      @default(OPEN)
+  resolution      DisputeResolution?
+  decidedByUserId String?            @map("decided_by_user_id") @db.Uuid
+  decisionNote    String?            @map("decision_note")
+  openedAt        DateTime           @map("opened_at") @db.Timestamptz(3)
+  decidedAt       DateTime?          @map("decided_at") @db.Timestamptz(3)
+  createdAt       DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime           @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  deal      Deal  @relation(fields: [dealId], references: [id])
+  openedBy  User  @relation("DisputeOpener", fields: [openedByUserId], references: [id])
+  decidedBy User? @relation("DisputeDecider", fields: [decidedByUserId], references: [id])
+
+  /// Uma só aberta por `Deal`, garantido por índice único parcial na migração
+  /// 016 — o Prisma não sabe exprimi-lo.
+  @@index([status, openedAt])
+  @@index([dealId, openedAt(sort: Desc)])
+  @@map("disputes")
+}
+
+enum CounterOfferStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
+
+/// Os termos alternativos propostos pelo criador (T4). Fica guardada depois de
+/// resolvida: é o histórico da negociação, e a prova do que cada lado propôs.
+model DealCounterOffer {
+  id               String             @id @default(uuid()) @db.Uuid
+  dealId           String             @map("deal_id") @db.Uuid
+  proposedByUserId String             @map("proposed_by_user_id") @db.Uuid
+  /// O preço anunciado pedido, sem taxa de nenhum dos lados.
+  priceMinor       BigInt             @map("price_minor")
+  currency         String             @db.Char(3)
+  slaHours         Int                @map("sla_hours")
+  message          String?
+  status           CounterOfferStatus @default(PENDING)
+  expiresAt        DateTime           @map("expires_at") @db.Timestamptz(3)
+  resolvedAt       DateTime?          @map("resolved_at") @db.Timestamptz(3)
+  createdAt        DateTime           @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  deal       Deal @relation(fields: [dealId], references: [id])
+  proposedBy User @relation(fields: [proposedByUserId], references: [id])
+
+  /// Uma só por `Deal` à espera de resposta, garantido por índice único parcial
+  /// na migração 013 — o Prisma não sabe exprimi-lo.
+  @@index([dealId, createdAt(sort: Desc)])
+  @@map("deal_counter_offers")
+}
+
+enum MessageKind {
+  TEXT
+  SYSTEM
+  ATTACHMENT
+  STATE_CHANGE
+}
+
+model Message {
+  id           String      @id @default(uuid()) @db.Uuid
+  /// Ordem de inserção. Várias mensagens da mesma transacção partilham o
+  /// `created_at` ao milissegundo, e desempatar por UUID daria ordem aleatória.
+  seq          BigInt      @default(autoincrement())
+  dealId       String      @map("deal_id") @db.Uuid
+  senderUserId String?     @map("sender_user_id") @db.Uuid
+  kind         MessageKind
+  body         String
+  clientId     String?     @map("client_id")
+  readAt       DateTime?   @map("read_at") @db.Timestamptz(3)
+  createdAt    DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  deal   Deal  @relation(fields: [dealId], references: [id])
+  sender User? @relation(fields: [senderUserId], references: [id])
+
+  @@unique([dealId, clientId])
+  @@index([dealId, createdAt(sort: Desc)])
+  @@index([dealId, seq])
+  @@map("messages")
+}
+
+model Delivery {
+  id              String    @id @default(uuid()) @db.Uuid
+  dealId          String    @map("deal_id") @db.Uuid
+  version         Int
+  note            String
+  submittedAt     DateTime  @map("submitted_at") @db.Timestamptz(3)
+  acceptedAt      DateTime? @map("accepted_at") @db.Timestamptz(3)
+  rejectedAt      DateTime? @map("rejected_at") @db.Timestamptz(3)
+  rejectionReason String?   @map("rejection_reason")
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  deal Deal @relation(fields: [dealId], references: [id])
+
+  @@unique([dealId, version])
+  @@map("deliveries")
+}
+
+// ─────────────────────────────────────────────────────────── 004 pagamentos
+
+enum PaymentIntentStatus {
+  CREATED
+  PENDING
+  CAPTURED
+  FAILED
+  EXPIRED
+  REVERSED
+}
+
+/// Para que serve a cobrança: o pagamento do pedido, ou o reforço da diferença
+/// depois de uma contraproposta mais cara ser aceite.
+enum PaymentPurpose {
+  INITIAL
+  TOP_UP
+}
+
+model PaymentIntent {
+  id                String              @id @default(uuid()) @db.Uuid
+  dealId            String              @map("deal_id") @db.Uuid
+  purpose           PaymentPurpose      @default(INITIAL)
+  /// A contraproposta que este reforço paga. Só preenchido em `TOP_UP`.
+  counterOfferId    String?             @map("counter_offer_id") @db.Uuid
+  provider          String
+  providerReference String              @unique @map("provider_reference")
+  idempotencyKey    String              @unique @map("idempotency_key")
+  amountMinor       BigInt              @map("amount_minor")
+  currency          String              @db.Char(3)
+  status            PaymentIntentStatus @default(CREATED)
+  payerPhone        String              @map("payer_phone")
+  expiresAt         DateTime            @map("expires_at") @db.Timestamptz(3)
+  capturedAt        DateTime?           @map("captured_at") @db.Timestamptz(3)
+  createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime            @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  deal   Deal           @relation(fields: [dealId], references: [id])
+  events PaymentEvent[]
+
+  @@index([dealId, status])
+  @@map("payment_intents")
+}
+
+model PaymentEvent {
+  id              String    @id @default(uuid()) @db.Uuid
+  paymentIntentId String    @map("payment_intent_id") @db.Uuid
+  providerEventId String    @unique @map("provider_event_id")
+  type            String
+  payload         Json
+  receivedAt      DateTime  @map("received_at") @db.Timestamptz(3)
+  processedAt     DateTime? @map("processed_at") @db.Timestamptz(3)
+
+  paymentIntent PaymentIntent @relation(fields: [paymentIntentId], references: [id])
+
+  @@index([paymentIntentId, receivedAt])
+  @@map("payment_events")
+}
+
+model IdempotencyKey {
+  scope        String
+  key          String
+  requestHash  String    @map("request_hash")
+  responseBody Json?     @map("response_body")
+  status       String
+  expiresAt    DateTime  @map("expires_at") @db.Timestamptz(3)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@id([scope, key])
+  @@index([expiresAt])
+  @@map("idempotency_keys")
+}
+
+// ───────────────────────────────────────────────────────────────── 005 razão
+
+enum LedgerAccount {
+  PROVIDER_CLEARING
+  ESCROW
+  CREATOR_AVAILABLE
+  CREATOR_RESERVED
+  PLATFORM_FEE_REVENUE
+  REFUNDS_PAYABLE
+  TAX_PAYABLE
+}
+
+enum LedgerDirection {
+  DEBIT
+  CREDIT
+}
+
+enum LedgerSubjectType {
+  DEAL
+  PROFILE
+  PLATFORM
+}
+
+model LedgerTransaction {
+  id                String   @id @default(uuid()) @db.Uuid
+  kind              String
+  dealId            String?  @map("deal_id") @db.Uuid
+  externalReference String   @map("external_reference")
+  description       String
+  occurredAt        DateTime @map("occurred_at") @db.Timestamptz(3)
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  deal    Deal?         @relation(fields: [dealId], references: [id])
+  entries LedgerEntry[]
+
+  @@unique([kind, externalReference])
+  @@index([dealId])
+  @@map("ledger_transactions")
+}
+
+model LedgerEntry {
+  id            String            @id @default(uuid()) @db.Uuid
+  transactionId String            @map("transaction_id") @db.Uuid
+  account       LedgerAccount
+  subjectType   LedgerSubjectType @map("subject_type")
+  subjectId     String            @map("subject_id") @db.Uuid
+  direction     LedgerDirection
+  amountMinor   BigInt            @map("amount_minor")
+  currency      String            @db.Char(3)
+  createdAt     DateTime          @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  transaction LedgerTransaction @relation(fields: [transactionId], references: [id])
+
+  @@index([account, subjectId, id])
+  @@index([transactionId])
+  @@map("ledger_entries")
+}
+
+/// Projecção do razão, nunca fonte de verdade. Ver RN-103.
+// ────────────────────────────────── 014/015 verificação e levantamentos (F5)
+
+enum IdentityDocumentType {
+  BI
+  PASSPORT
+  NIF
+}
+
+enum IdentityVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  EXPIRED
+}
+
+/// Submissão de identidade do criador. Só o próprio e a administração a lêem
+/// (RN-062), e os ficheiros são sempre `PROTECTED`.
+model IdentityVerification {
+  id             String                     @id @default(uuid()) @db.Uuid
+  userId         String                     @map("user_id") @db.Uuid
+  documentType   IdentityDocumentType       @map("document_type")
+  /// Em claro à espera de DP-17. **Nunca sai da API** — as leituras devolvem
+  /// só os últimos dígitos, e o registo estruturado não o toca.
+  documentNumber String                     @map("document_number")
+  fullName       String                     @map("full_name")
+  status         IdentityVerificationStatus @default(PENDING)
+  reviewerUserId String?                    @map("reviewer_user_id") @db.Uuid
+  reviewedAt     DateTime?                  @map("reviewed_at") @db.Timestamptz(3)
+  rejectionReason String?                   @map("rejection_reason")
+  submittedAt    DateTime                   @map("submitted_at") @db.Timestamptz(3)
+  createdAt      DateTime                   @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt      DateTime                   @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  user     User  @relation("IdentitySubject", fields: [userId], references: [id])
+  reviewer User? @relation("IdentityReviewer", fields: [reviewerUserId], references: [id])
+
+  @@index([userId, status])
+  @@index([status, submittedAt])
+  @@map("identity_verifications")
+}
+
+enum PayoutStatus {
+  REQUESTED
+  APPROVED
+  PROCESSING
+  PAID
+  FAILED
+  CANCELLED
+}
+
+enum PayoutMethod {
+  BANK_TRANSFER
+  MULTICAIXA_EXPRESS
+}
+
+/// Um levantamento. O valor é reservado no razão no momento do pedido (RN-052)
+/// e só sai da plataforma quando a administração confirma.
+model Payout {
+  id                String       @id @default(uuid()) @db.Uuid
+  profileId         String       @map("profile_id") @db.Uuid
+  requestedByUserId String       @map("requested_by_user_id") @db.Uuid
+  amountMinor       BigInt       @map("amount_minor")
+  /// Taxa do parceiro. Zero enquanto DP-04 não fechar; a coluna existe para
+  /// não obrigar a migrar `payouts` quando fechar.
+  feeMinor          BigInt       @default(0) @map("fee_minor")
+  netMinor          BigInt       @map("net_minor")
+  currency          String       @db.Char(3)
+  method            PayoutMethod
+  /// Em claro à espera de DP-17. **Nunca sai da API nem entra no registo.**
+  destination       String
+  /// O que as leituras mostram: os últimos dígitos e mais nada.
+  destinationMasked String       @map("destination_masked")
+  status            PayoutStatus @default(REQUESTED)
+  providerReference String?      @map("provider_reference")
+  failureReason     String?      @map("failure_reason")
+  reviewedByUserId  String?      @map("reviewed_by_user_id") @db.Uuid
+  requestedAt       DateTime     @map("requested_at") @db.Timestamptz(3)
+  approvedAt        DateTime?    @map("approved_at") @db.Timestamptz(3)
+  settledAt         DateTime?    @map("settled_at") @db.Timestamptz(3)
+  createdAt         DateTime     @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt         DateTime     @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  profile     Profile @relation(fields: [profileId], references: [id])
+  requestedBy User    @relation("PayoutRequester", fields: [requestedByUserId], references: [id])
+  reviewedBy  User?   @relation("PayoutReviewer", fields: [reviewedByUserId], references: [id])
+
+  @@index([profileId, status, requestedAt(sort: Desc)])
+  @@index([status, requestedAt])
+  @@map("payouts")
+}
+
+model Wallet {
+  profileId      String   @id @map("profile_id") @db.Uuid
+  availableMinor BigInt   @default(0) @map("available_minor")
+  reservedMinor  BigInt   @default(0) @map("reserved_minor")
+  pendingMinor   BigInt   @default(0) @map("pending_minor")
+  currency       String   @db.Char(3)
+  recomputedAt   DateTime @map("recomputed_at") @db.Timestamptz(3)
+
+  profile Profile @relation(fields: [profileId], references: [id])
+
+  @@map("wallets")
+}
+
+// ───────────────────────────────────────────────────────────── 006 operação
+
+model OutboxEvent {
+  id          String    @id @default(uuid()) @db.Uuid
+  type        String
+  payload     Json
+  availableAt DateTime  @map("available_at") @db.Timestamptz(3)
+  attempts    Int       @default(0)
+  /// O que correu mal da última vez. Sem isto, um evento que falha para sempre
+  /// não diz porquê, e ninguém sabe se é para corrigir ou para desistir.
+  lastError   String?   @map("last_error")
+  processedAt DateTime? @map("processed_at") @db.Timestamptz(3)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  deliveries NotificationDelivery[]
+
+  @@index([processedAt, availableAt])
+  @@map("outbox_events")
+}
+
+enum ChannelKind {
+  PUSH
+  SMS
+  EMAIL
+}
+
+/// Cada notificação enviada, uma linha.
+///
+/// É o registo de idempotência e o rasto ao mesmo tempo: a chave única por
+/// `(evento, destinatário, canal)` é o que garante que uma retentativa do
+/// trabalhador não envia a mesma coisa duas vezes (SDD §14.3).
+model NotificationDelivery {
+  id                String      @id @default(uuid()) @db.Uuid
+  outboxEventId     String      @map("outbox_event_id") @db.Uuid
+  recipientUserId   String      @map("recipient_user_id") @db.Uuid
+  channel           ChannelKind
+  template          String
+  /// `eventId:recipientUserId:channel`. Único, e é o que trava o duplo envio.
+  idempotencyKey    String      @unique @map("idempotency_key")
+  provider          String
+  providerReference String?     @map("provider_reference")
+  sentAt            DateTime    @map("sent_at") @db.Timestamptz(3)
+  createdAt         DateTime    @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  event     OutboxEvent @relation(fields: [outboxEventId], references: [id])
+  recipient User        @relation(fields: [recipientUserId], references: [id])
+
+  @@index([recipientUserId, sentAt(sort: Desc)])
+  @@map("notification_deliveries")
+}
+
+// ────────────────────────────────────────────── 019 reconciliação (F10)
+
+enum FindingKind {
+  STUCK_PAYMENT_INTENT
+  CAPTURE_WITHOUT_LEDGER
+  WALLET_DIVERGENCE
+  STUCK_PAYOUT
+  UNBALANCED_LEDGER
+  ESCROW_ON_CLOSED_DEAL
+}
+
+enum FindingStatus {
+  OPEN
+  RESOLVED
+  ACCEPTED
+}
+
+enum FindingSeverity {
+  WARNING
+  CRITICAL
+}
+
+/// Uma divergência entre o que o sistema diz e o que o sistema fez.
+///
+/// **Nenhuma correcção é automática** (SDD §11.5): a tarefa detecta e regista,
+/// e uma pessoa decide, com registo de auditoria.
+model ReconciliationFinding {
+  id               String          @id @default(uuid()) @db.Uuid
+  kind             FindingKind
+  severity         FindingSeverity
+  status           FindingStatus   @default(OPEN)
+  subjectType      String          @map("subject_type")
+  subjectId        String          @map("subject_id")
+  /// `kind:subjectId`. Impede a mesma divergência de ser registada a cada
+  /// passagem da tarefa — único parcial enquanto estiver aberta.
+  fingerprint      String
+  detail           String
+  metadata         Json            @default("{}")
+  detectedAt       DateTime        @map("detected_at") @db.Timestamptz(3)
+  resolvedAt       DateTime?       @map("resolved_at") @db.Timestamptz(3)
+  resolvedByUserId String?         @map("resolved_by_user_id") @db.Uuid
+  resolutionNote   String?         @map("resolution_note")
+  createdAt        DateTime        @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime        @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  resolvedBy User? @relation("FindingResolver", fields: [resolvedByUserId], references: [id])
+
+  @@index([status, severity, detectedAt(sort: Desc)])
+  @@index([subjectType, subjectId])
+  @@map("reconciliation_findings")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid()) @db.Uuid
+  actorUserId String?  @map("actor_user_id") @db.Uuid
+  actorKind   String   @map("actor_kind")
+  action      String
+  subjectType String   @map("subject_type")
+  subjectId   String   @map("subject_id")
+  metadata    Json?
+  ip          String?
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  actor User? @relation(fields: [actorUserId], references: [id])
+
+  @@index([subjectType, subjectId, createdAt(sort: Desc)])
+  @@index([actorUserId, createdAt(sort: Desc)])
+  @@map("audit_logs")
+}
+
+/// RN-046/047: one buyer review per completed Deal.
+model Review {
+  id           String   @id @default(uuid()) @db.Uuid
+  dealId       String   @unique @map("deal_id") @db.Uuid
+  authorUserId String   @map("author_user_id") @db.Uuid
+  profileId    String   @map("profile_id") @db.Uuid
+  rating       Int
+  body         String
+  /// A resposta do criador. Uma só, e não se apaga (RN-046).
+  reply        String?
+  repliedAt    DateTime? @map("replied_at") @db.Timestamptz(3)
+  publishedAt  DateTime @map("published_at") @db.Timestamptz(3)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([profileId, publishedAt(sort: Desc)])
+  @@map("reviews")
+}
+
+// Conteúdo e media ficam separados dos fluxos financeiros. ContentGrant é o gate.
+model Media {
+  id          String   @id @default(uuid()) @db.Uuid
+  ownerUserId String   @map("owner_user_id") @db.Uuid
+  storageKey  String   @unique @map("storage_key")
+  mimeType    String   @map("mime_type")
+  byteSize    Int      @map("byte_size")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([ownerUserId, createdAt])
+  @@map("media")
+}
+
+model ContentItem {
+  id              String    @id @default(uuid()) @db.Uuid
+  profileId       String    @map("profile_id") @db.Uuid
+  kind            String
+  caption         String
+  visibility      String
+  priceMinor      BigInt    @default(0) @map("price_minor")
+  currency        String    @default("AOA") @db.Char(3)
+  mediaIds        String[]  @map("media_ids") @db.Uuid
+  previewMediaIds String[]  @map("preview_media_ids") @db.Uuid
+  folder          String?
+  status          String
+  scheduledAt     DateTime? @map("scheduled_at") @db.Timestamptz(3)
+  publishedAt     DateTime? @map("published_at") @db.Timestamptz(3)
+  deletedAt       DateTime? @map("deleted_at") @db.Timestamptz(3)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt       DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@index([profileId, status, scheduledAt])
+  @@map("content_items")
+}
+
+model ContentGrant {
+  id        String    @id @default(uuid()) @db.Uuid
+  contentId String    @map("content_id") @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  source    String
+  grantedAt DateTime  @map("granted_at") @db.Timestamptz(3)
+  expiresAt DateTime? @map("expires_at") @db.Timestamptz(3)
+  revokedAt DateTime? @map("revoked_at") @db.Timestamptz(3)
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  @@unique([contentId, userId])
+  @@map("content_grants")
+}

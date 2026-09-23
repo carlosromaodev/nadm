@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    // Ficheiro de incremental próprio: partilhá-lo com o `tsc --noEmit` da
+    // verificação de tipos faz o build achar que já emitiu tudo, e o
+    // `deleteOutDir` deixa o `dist` vazio sem dar erro.
+    "tsBuildInfoFile": "./node_modules/.cache/tsconfig.build.tsbuildinfo"
+  },
+  "exclude": ["node_modules", "dist", "test", "src/**/*.spec.ts", "src/shared/testing/**"]
+}

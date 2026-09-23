@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;1000&display=swap" />
+<style>
+doc-page:not(:defined){visibility:hidden}
+body{font-family:'Nunito',system-ui,sans-serif}
+table{border-collapse:collapse;width:100%}
+th,td{text-align:left;vertical-align:top;padding:7px 10px 7px 0;border-bottom:1px solid rgba(22,40,30,.13)}
+th{font-weight:800;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(22,40,30,.66);border-bottom:1.5px solid rgba(22,40,30,.3)}
+td{font-size:12.5px;line-height:1.5;color:#16281e}
+td:last-child,th:last-child{padding-right:0}
+.num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.est{font-weight:800;white-space:nowrap}
+.cx{break-inside:avoid;orphans:3;widows:3}
+a{color:#4a7a12}
+a:hover{color:#16281e}
+</style>
+<script src="./doc-page.js"></script>
+</helmet>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden"><defs><path id="nadm-flor" d="M0 -48.8C1.7 -48.8 3.4 -48.6 5.1 -48.3C6.8 -48.1 8.4 -47.8 10 -47.3C11.6 -46.7 13.7 -47.1 14.6 -45C15.5 -43 15.4 -38.6 15.2 -35C15 -31.3 12.3 -24.1 13.4 -23.2C14.6 -22.4 19.2 -28.1 22.1 -30C25.1 -31.9 28.9 -34.2 31.1 -34.5C33.4 -34.8 34.2 -33 35.5 -32C36.8 -30.9 38 -29.7 39.1 -28.4C40.2 -27.1 41.1 -25.7 42 -24.2C42.8 -22.8 43.6 -21.3 44.2 -19.7C44.8 -18.1 45.4 -16.5 45.6 -14.8C45.8 -13.2 46.7 -11.5 45.3 -9.7C44 -7.9 40.3 -5.8 37.5 -4.2C34.6 -2.6 28.7 -1.3 28.1 0C27.5 1.3 31.3 2.2 34.1 3.8C36.9 5.4 43.2 7.8 45.1 9.6C47.1 11.5 45.8 13.2 45.6 14.8C45.5 16.5 44.9 18.2 44.3 19.7C43.7 21.3 43 22.9 42.1 24.3C41.3 25.8 40.3 27.2 39.2 28.5C38.1 29.8 37 31.1 35.7 32.1C34.4 33.1 33.5 35 31.3 34.7C29.1 34.4 25.3 32.2 22.3 30.3C19.4 28.4 14.7 22.7 13.5 23.4C12.3 24.2 15.1 31.4 15.2 35C15.4 38.5 15.5 42.9 14.6 45C13.7 47 11.6 46.6 10 47.1C8.4 47.7 6.7 48.1 5.1 48.4C3.4 48.6 1.7 48.7 0 48.7C-1.7 48.7 -3.4 48.7 -5.1 48.4C-6.8 48.2 -8.4 47.8 -10 47.3C-11.6 46.7 -13.8 47.1 -14.6 45.1C-15.5 43 -15.4 38.6 -15.2 35C-15.1 31.4 -12.4 24.2 -13.5 23.5C-14.7 22.7 -19.4 28.4 -22.3 30.3C-25.3 32.2 -29.1 34.4 -31.3 34.7C-33.5 35 -34.4 33.1 -35.7 32.1C-37 31.1 -38.1 29.8 -39.2 28.5C-40.3 27.2 -41.3 25.8 -42.1 24.3C-43 22.9 -43.7 21.3 -44.3 19.7C-44.9 18.2 -45.5 16.5 -45.6 14.8C-45.8 13.2 -47.1 11.5 -45.2 9.6C-43.2 7.8 -36.9 5.4 -34.1 3.8C-31.2 2.2 -27.5 1.3 -28.1 0C-28.7 -1.3 -34.7 -2.6 -37.6 -4.2C-40.5 -5.8 -44 -7.9 -45.4 -9.7C-46.7 -11.5 -45.8 -13.2 -45.6 -14.8C-45.4 -16.5 -44.8 -18.1 -44.2 -19.7C-43.6 -21.3 -42.8 -22.8 -41.9 -24.2C-41.1 -25.6 -40.1 -27.1 -39 -28.3C-37.9 -29.6 -36.8 -30.9 -35.5 -32C-34.2 -33 -33.3 -34.8 -31.1 -34.5C-28.9 -34.2 -25.1 -31.9 -22.2 -30C-19.2 -28.1 -14.4 -22.1 -13.4 -23.2C-12.4 -24.4 -16 -33.3 -16.2 -36.9C-16.4 -40.5 -15.6 -43.2 -14.6 -44.9C-13.5 -46.6 -11.6 -46.5 -10 -47.1C-8.4 -47.7 -6.7 -48 -5.1 -48.3C-3.4 -48.6 -1.7 -48.8 0 -48.8Z"></path></defs></svg>
+<doc-page margin="0.8in">
+
+<div slot="header" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:7px;border-bottom:1px solid rgba(22,40,30,.15)">
+<span style="display:flex;align-items:center;gap:7px">
+<svg viewBox="-50 -50 100 100" style="width:15px;height:15px;display:block"><use href="#nadm-flor" fill="#4a7a12"></use></svg>
+<span style="font:1000 12px 'Nunito',system-ui;letter-spacing:-.02em;color:#16281e">NaDM</span>
+</span>
+<span style="font:800 9px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(22,40,30,.6)">Especificação funcional · v1.0</span>
+</div>
+
+<div slot="footer" style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding-top:7px;border-top:1px solid rgba(22,40,30,.15);font:700 9.5px 'Nunito',system-ui;color:rgba(22,40,30,.58)">
+<span>Máquinas de estado, glossário financeiro e matriz de taxas</span>
+<span>Acompanha os mockups P0–P36</span>
+</div>
+
+<h1 style="font:1000 32px/1.1 'Nunito',system-ui;letter-spacing:-.045em;color:#16281e;margin:22px 0 10px">Como a NaDM funciona por dentro</h1>
+
+<p style="font:700 15px/1.6 'Nunito',system-ui;color:rgba(22,40,30,.76);margin:0 0 22px;max-width:62ch">Este documento fixa três coisas que os ecrãs mostram mas não podem definir sozinhos: que estados existe cada objecto e como passa de um para o outro, quanto custa cada transacção a cada lado, e o que significam exactamente as palavras que aparecem no dinheiro. Onde os mockups e este documento divergirem, manda este documento.</p>
+
+<div style="background:#f1f3e9;border:1px solid rgba(22,40,30,.14);border-radius:14px;padding:15px 17px;margin:0 0 26px" class="cx">
+<div style="font:800 9.5px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(22,40,30,.6);margin-bottom:8px">A regra que atravessa tudo</div>
+<p style="font:800 14px/1.55 'Nunito',system-ui;color:#16281e;margin:0">O dinheiro nunca passa directamente de quem paga para quem recebe. Fica retido na NaDM entre o pagamento e a aprovação, e é essa retenção que torna possível devolver sem discutir. Todos os estados abaixo existem para responder a uma única pergunta: <em style="font-style:normal;color:#4a7a12">de quem é o dinheiro neste momento</em>.</p>
+</div>
+
+<h2 style="font:1000 21px/1.2 'Nunito',system-ui;letter-spacing:-.03em;color:#16281e;margin:0 0 4px">1. Matriz de taxas</h2>
+<p style="font:700 13.5px/1.6 'Nunito',system-ui;color:rgba(22,40,30,.74);margin:0 0 14px;max-width:60ch">A NaDM cobra <strong style="color:#16281e">5% a cada lado</strong> de cada transacção: o comprador paga 5% acima do preço de tabela, o criador recebe 5% abaixo. Os dois valores são mostrados a ambas as partes antes do pagamento. A NaDM fica com 10% do preço de tabela.</p>
+
+<table style="margin:0 0 8px">
+<thead>
+<tr><th>Transacção</th><th class="num">Tabela</th><th class="num">Comprador paga</th><th class="num">Criador recebe</th><th class="num">NaDM</th></tr>
+</thead>
+<tbody>
+<tr><td>Pergunta escrita</td><td class="num">3 500 Kz</td><td class="num">3 675 Kz</td><td class="num">3 325 Kz</td><td class="num">350 Kz</td></tr>
+<tr><td>DM prioritária</td><td class="num">7 500 Kz</td><td class="num">7 875 Kz</td><td class="num">7 125 Kz</td><td class="num">750 Kz</td></tr>
+<tr><td>Publicação paga</td><td class="num">2 500 Kz</td><td class="num">2 625 Kz</td><td class="num">2 375 Kz</td><td class="num">250 Kz</td></tr>
+<tr><td>Resposta em vídeo</td><td class="num">18 000 Kz</td><td class="num">18 900 Kz</td><td class="num">17 100 Kz</td><td class="num">1 800 Kz</td></tr>
+<tr><td>Chamada de 15 min</td><td class="num">45 000 Kz</td><td class="num">47 250 Kz</td><td class="num">42 750 Kz</td><td class="num">4 500 Kz</td></tr>
+<tr><td>Bilhete de evento</td><td class="num">15 000 Kz</td><td class="num">15 750 Kz</td><td class="num">14 250 Kz</td><td class="num">1 500 Kz</td></tr>
+<tr><td>Adesão mensal</td><td class="num">9 000 Kz</td><td class="num">9 450 Kz</td><td class="num">8 550 Kz</td><td class="num">900 Kz</td></tr>
+<tr><td>Campanha de marca</td><td class="num">350 000 Kz</td><td class="num">367 500 Kz</td><td class="num">332 500 Kz</td><td class="num">35 000 Kz</td></tr>
+</tbody>
+</table>
+<p style="font:700 11px/1.5 'Nunito',system-ui;color:rgba(22,40,30,.6);margin:0 0 16px">Preços de tabela ilustrativos, definidos por cada criador. As percentagens são fixas.</p>
+
+<h3 style="font:1000 14px 'Nunito',system-ui;letter-spacing:-.01em;color:#16281e;margin:0 0 7px">O que o NaDM Pro muda</h3>
+<table style="margin:0 0 10px">
+<thead>
+<tr><th>Plano</th><th class="num">Custo</th><th class="num">Taxa do criador</th><th class="num">Taxa do comprador</th><th>Preços</th></tr>
+</thead>
+<tbody>
+<tr><td>Grátis</td><td class="num">0 Kz</td><td class="num">5%</td><td class="num">5%</td><td>quatro escalões fixos</td></tr>
+<tr><td>Pro mensal</td><td class="num">12 000 Kz/mês</td><td class="num">0%</td><td class="num">5%</td><td>valor livre</td></tr>
+<tr><td>Pro anual</td><td class="num">120 000 Kz/ano</td><td class="num">0%</td><td class="num">5%</td><td>valor livre</td></tr>
+</tbody>
+</table>
+<p style="font:700 12.5px/1.55 'Nunito',system-ui;color:rgba(22,40,30,.74);margin:0 0 26px;max-width:60ch">O Pro nunca altera o que o comprador paga. Sair do Pro não baixa preços sozinho: ofertas com valor acima do escalão mais alto voltam a rascunho e deixam de estar à venda até serem corrigidas.</p>
+
+<h2 style="font:1000 21px/1.2 'Nunito',system-ui;letter-spacing:-.03em;color:#16281e;margin:0 0 4px;break-before:page">2. Máquinas de estado</h2>
+<p style="font:700 13.5px/1.6 'Nunito',system-ui;color:rgba(22,40,30,.74);margin:0 0 20px;max-width:60ch">Oito objectos têm ciclo de vida próprio. Para cada um: os estados, o que dispara cada passagem, e onde está o dinheiro em cada momento.</p>
+
+<h3 style="font:1000 15.5px 'Nunito',system-ui;letter-spacing:-.015em;color:#16281e;margin:0 0 3px">2.1 Pedido</h3>
+<p style="font:700 12px/1.5 'Nunito',system-ui;color:rgba(22,40,30,.66);margin:0 0 9px">Ecrãs P5 (comprador), P9 e P23 (criador). O objecto central da app.</p>
+<table style="margin:0 0 20px">
+<thead>
+<tr><th>Estado</th><th>Significa</th><th>Passa a</th><th>Quando</th></tr>
+</thead>
+<tbody>
+<tr><td class="est">A decidir</td><td>Pago e retido. O criador tem prazo para aceitar.</td><td>Aceite · Recusado · Expirado</td><td>Decisão do criador, ou fim do prazo</td></tr>
+<tr><td class="est">Aceite</td><td>Retido. O relógio de entrega começou.</td><td>Entregue · Prazo falhado</td><td>Ficheiro entregue, ou prazo esgotado</td></tr>
+<tr><td class="est">Entregue</td><td>Retido. O comprador tem 2 dias para responder.</td><td>Aprovado · Alteração pedida</td><td>Aprovação, pedido de alteração, ou silêncio</td></tr>
+<tr><td class="est">Alteração pedida</td><td>Retido. Uma alteração incluída por pedido.</td><td>Entregue</td><td>Nova versão entregue. Esta é final.</td></tr>
+<tr><td class="est">Aprovado</td><td><strong style="color:#4a7a12">Terminal.</strong> Dinheiro liberto para a carteira.</td><td>—</td><td>Aprovação, ou 2 dias de silêncio</td></tr>
+<tr><td class="est">Recusado</td><td><strong style="color:#4a7a12">Terminal.</strong> Devolvido em 24h.</td><td>—</td><td>Recusa com motivo. Não conta na taxa de resposta.</td></tr>
+<tr><td class="est">Expirado</td><td><strong style="color:#4a7a12">Terminal.</strong> Devolvido automaticamente.</td><td>—</td><td>Prazo de aceitação esgotado. Conta na taxa.</td></tr>
+<tr><td class="est">Em disputa</td><td>Retido e travado. Revisão pela NaDM.</td><td>Aprovado · Devolvido</td><td>Decisão da NaDM em até 5 dias</td></tr>
+</tbody>
+</table>
+
+<h3 style="font:1000 15.5px 'Nunito',system-ui;letter-spacing:-.015em;color:#16281e;margin:0 0 3px">2.2 Verificação de identidade</h3>
+<p style="font:700 12px/1.5 'Nunito',system-ui;color:rgba(22,40,30,.66);margin:0 0 9px">Ecrã P22. Obrigatória para receber dinheiro, nunca para comprar.</p>
+<table style="margin:0 0 20px">
+<thead>
+<tr><th>Estado</th><th>Significa</th><th>Passa a</th><th>Quando</th></tr>
+</thead>
+<tbody>
+<tr><td class="est">Por enviar</td><td>Pode usar a app e receber pedidos. Não pode levantar.</td><td>Em análise</td><td>BI e selfie enviados</td></tr>
+<tr><td class="est">Em análise</td><td>Pode continuar a usar a app durante a espera.</td><td>Confirmada · Recusada · Incompleta</td><td>Revisão em até 24h</td></tr>
+<tr><td class="est">Recusada</td><td>Documento ilegível ou inválido. Diz qual e porquê.</td><td>Em análise</td><td>Novo envio. Sem limite de tentativas úteis.</td></tr>
+<tr><td class="est">Incompleta</td><td>Uma das duas peças aceite, a outra em falta.</td><td>Em análise</td><td>Peça em falta enviada</td></tr>
+<tr><td class="est">Suspensa</td><td>Três tentativas falhadas. Revisão manual.</td><td>Confirmada · Recusada definitiva</td><td>Decisão humana em até 48h</td></tr>
+<tr><td class="est">Confirmada</td><td><strong style="color:#4a7a12">Terminal.</strong> Levantamentos abertos.</td><td>—</td><td>—</td></tr>
+</tbody>
+</table>
+
+<h3 style="font:1000 15.5px 'Nunito',system-ui;letter-spacing:-.015em;color:#16281e;margin:0 0 3px">2.3 Levantamento</h3>
+<p style="font:700 12px/1.5 'Nunito',system-ui;color:rgba(22,40,30,.66);margin:0 0 9px">Ecrã P18. Só sobre saldo disponível — nunca sobre valor retido.</p>
+<table style="margin:0 0 20px">
+<thead>
+<tr><th>Estado</th><th>Significa</th><th>Passa a</th><th>Quando</th></tr>
+</thead>
+<tbody>
+<tr><td class="est">Pedido</td><td>Sai do saldo disponível no momento do pedido.</td><td>Em validação</td><td>Imediato</td></tr>
+<tr><td class="est">Em validação</td><td>Confirmação de número e nome do titular.</td><td>A caminho · Revertido</td><td>Menos de uma hora, tipicamente</td></tr>
+<tr><td class="est">A caminho</td><td>Enviado ao banco. Fora do alcance da NaDM.</td><td>Concluído · Falhado</td><td>1 a 3 dias úteis</td></tr>
+<tr><td class="est">Revertido</td><td>Nome do titular não bate com o BI verificado.</td><td>Pedido</td><td>Volta ao saldo sem custo. Dados a corrigir.</td></tr>
+<tr><td class="est">Falhado</td><td>Recusado pelo banco depois de enviado.</td><td>Pedido</td><td>Volta ao saldo em até 3 dias úteis</td></tr>
+<tr><td class="est">Concluído</td><td><strong style="color:#4a7a12">Terminal.</strong> Confirmado pelo banco.</td><td>—</td><td>—</td></tr>
+</tbody>
+</table>
+
+<h3 style="font:1000 15.5px 'Nunito',system-ui;letter-spacing:-.015em;color:#16281e;margin:0 0 3px">2.4 Adesão mensal</h3>
+<p style="font:700 12px/1.5 'Nunito',system-ui;color:rgba(22,40,30,.66);margin:0 0 9px">Ecrã P29. Ao contrário do pedido, não tem prazo nem entrega: é acesso enquanto durar.</p>
+<table style="margin:0 0 20px">
+<thead>
+<tr><th>Estado</th><th>Significa</th><th>Passa a</th><th>Quando</th></tr>
+</thead>
+<tbody>
+<tr><td class="est">Activa</td><td>Acesso completo. Renova todos os meses.</td><td>Em atraso · A terminar</td><td>Cobrança falhada, ou cancelamento</td></tr>
+<tr><td class="est">Em atraso</td><td>Cobrança falhada. Acesso mantém-se.</td><td>Activa · Tolerância</td><td>Nova tentativa a +3 e a +6 dias</td></tr>
+<tr><td class="est">Tolerância</td><td>Três tentativas falhadas. Sete dias de acesso.</td><td>Activa · Expirada</td><td>Pagamento manual, ou fim dos sete dias</td></tr>
+<tr><td class="est">A terminar</td><td>Cancelada mas paga. Acesso até ao fim do período.</td><td>Expirada</td><td>Data de renovação atingida</td></tr>
+<tr><td class="est">Expirada</td><td><strong style="color:#4a7a12">Terminal.</strong> Conteúdo de membro fecha.</td><td>Activa</td><td>Nova adesão, sem taxa de entrada</td></tr>
+</tbody>
+</table>
+<p style="font:700 12.5px/1.55 'Nunito',system-ui;color:rgba(22,40,30,.74);margin:-10px 0 24px;max-width:60ch"><strong style="color:#16281e">Falhar uma cobrança não é cancelar.</strong> São caminhos distintos: um é acidente e tem sete dias de reparação, o outro é decisão e respeita o período já pago. O que foi comprado à parte nunca fecha.</p>
+
+<h3 style="font:1000 15.5px 'Nunito',system-ui;letter-spacing:-.015em;color:#16281e;margin:0 0 3px;break-before:page">2.5 Evento</h3>
+<p style="font:700 12px/1.5 'Nunito',system-ui;color:rgba(22,40,30,.66);margin:0 0 9px">Ecrãs P31 (criador) e P32 (bilhete). A única transacção com uma data imposta de fora.</p>
+<table style="margin:0 0 20px">
+<thead>
+<tr><th>Estado</th><th>Significa</th><th>Passa a</th><th>Quando</th></tr>
+</thead>
+<tbody>
+<tr><td class="est">Rascunho</td><td>Tudo editável, incluindo data e local.</td><td>À venda</td><td>Publicação</td></tr>
+<tr><td class="est">À venda</td><td>Data e local fechados na primeira venda.</td><td>Esgotado · É hoje · Cancelado</td><td>Lotação cheia, chegada da data, ou cancelamento</td></tr>
+<tr><td class="est">Esgotado</td><td>Lista de espera aberta. Lotação aumentável.</td><td>À venda · É hoje</td><td>Aumento de lotação, ou chegada da data</td></tr>
+<tr><td class="est">É hoje</td><td>Leitor de bilhetes activo. Funciona sem rede.</td><td>Terminado</td><td>Fim da hora marcada</td></tr>
+<tr><td class="est">Terminado</td><td>Dinheiro liberto 24h depois do fim.</td><td>—</td><td>Quem não apareceu não é reembolsado.</td></tr>
+<tr><td class="est">Cancelado</td><td><strong style="color:#4a7a12">Terminal.</strong> Devolução total e automática.</td><td>—</td><td>Inclui a taxa. Conta na fiabilidade do criador.</td></tr>
+</tbody>
+</table>
+
+<h3 style="font:1000 15.5px 'Nunito',system-ui;letter-spacing:-.015em;color:#16281e;margin:0 0 3px">2.6 Bilhete</h3>
+<table style="margin:0 0 20px">
+<thead>
+<tr><th>Estado</th><th>Significa</th><th>Passa a</th><th>Quando</th></tr>
+</thead>
+<tbody>
+<tr><td class="est">Válido</td><td>Código activo. Nominal, uma transferência permitida.</td><td>Usado · Devolvido · Caducado</td><td>Leitura à porta, devolução, ou fim do evento</td></tr>
+<tr><td class="est">Usado</td><td><strong style="color:#4a7a12">Terminal.</strong> Não entra outra vez.</td><td>—</td><td>Cada código entra uma só vez.</td></tr>
+<tr><td class="est">Devolvido</td><td><strong style="color:#4a7a12">Terminal.</strong> Total até 48h antes.</td><td>—</td><td>Devolução pedida dentro do prazo</td></tr>
+<tr><td class="est">Caducado</td><td><strong style="color:#4a7a12">Terminal.</strong> Não compareceu. Sem devolução.</td><td>—</td><td>Evento terminado sem leitura</td></tr>
+</tbody>
+</table>
+
+<h3 style="font:1000 15.5px 'Nunito',system-ui;letter-spacing:-.015em;color:#16281e;margin:0 0 3px">2.7 Campanha de marca</h3>
+<p style="font:700 12px/1.5 'Nunito',system-ui;color:rgba(22,40,30,.66);margin:0 0 9px">Ecrãs P14 (criador) e P34 (empresa). Entrega por peças, não de uma vez.</p>
+<table style="margin:0 0 20px">
+<thead>
+<tr><th>Estado</th><th>Significa</th><th>Passa a</th><th>Quando</th></tr>
+</thead>
+<tbody>
+<tr><td class="est">Proposta</td><td>Compromisso de pagamento da empresa. 48h para decidir.</td><td>Aceite · Contraproposta · Recusada · Expirada</td><td>Decisão do criador, ou fim das 48h</td></tr>
+<tr><td class="est">Contraproposta</td><td>Valor ou prazo alterados pelo criador.</td><td>Aceite · Recusada</td><td>Resposta da empresa</td></tr>
+<tr><td class="est">A decorrer</td><td>Retido na íntegra. Progresso contado por peça.</td><td>Entregue</td><td>Última peça entregue</td></tr>
+<tr><td class="est">Entregue</td><td>Retido até aprovação da empresa.</td><td>Aprovada · Em disputa</td><td>Aprovação, ou 5 dias de silêncio</td></tr>
+<tr><td class="est">Aprovada</td><td><strong style="color:#4a7a12">Terminal.</strong> Liberto. Factura emitida.</td><td>—</td><td>—</td></tr>
+<tr><td class="est">Expirada</td><td><strong style="color:#4a7a12">Terminal.</strong> Devolvido à empresa.</td><td>—</td><td>Sem resposta em 48h</td></tr>
+</tbody>
+</table>
+
+<h3 style="font:1000 15.5px 'Nunito',system-ui;letter-spacing:-.015em;color:#16281e;margin:0 0 3px">2.8 Moderação</h3>
+<p style="font:700 12px/1.5 'Nunito',system-ui;color:rgba(22,40,30,.66);margin:0 0 9px">Ecrã P35. Denunciar e bloquear são acções separadas com efeitos distintos.</p>
+<table style="margin:0 0 24px">
+<thead>
+<tr><th>Estado</th><th>Significa</th><th>Passa a</th><th>Quando</th></tr>
+</thead>
+<tbody>
+<tr><td class="est">Sem histórico</td><td>Conta normal.</td><td>Aviso de risco</td><td>Primeira denúncia confirmada</td></tr>
+<tr><td class="est">Aviso de risco</td><td>Conta normal. Aviso por SMS e email.</td><td>Sem histórico · Suspensa</td><td>90 dias sem incidentes, ou terceira confirmação</td></tr>
+<tr><td class="est">Suspensa</td><td>Perfil escondido, ofertas fechadas, levantamentos travados. Trabalhos em curso continuam.</td><td>Em recurso · Encerrada</td><td>Recurso em 30 dias, ou fim do prazo</td></tr>
+<tr><td class="est">Em recurso</td><td>Revisto por pessoa diferente da que decidiu.</td><td>Sem histórico · Encerrada</td><td>Decisão em até 10 dias</td></tr>
+<tr><td class="est">Encerrada</td><td><strong style="color:#4a7a12">Terminal.</strong> Saldo levantável durante 90 dias.</td><td>—</td><td>O dinheiro já ganho nunca se perde.</td></tr>
+</tbody>
+</table>
+
+<h2 style="font:1000 21px/1.2 'Nunito',system-ui;letter-spacing:-.03em;color:#16281e;margin:0 0 4px;break-before:page">3. Glossário financeiro</h2>
+<p style="font:700 13.5px/1.6 'Nunito',system-ui;color:rgba(22,40,30,.74);margin:0 0 16px;max-width:60ch">Estas nove palavras aparecem em ecrãs diferentes e significam sempre a mesma coisa. Nenhuma pode ser usada como sinónimo de outra.</p>
+
+<table style="margin:0 0 22px">
+<thead>
+<tr><th style="width:24%">Termo</th><th>Definição exacta</th></tr>
+</thead>
+<tbody>
+<tr><td class="est">Preço de tabela</td><td>O número que o criador escolhe. Nunca é o que o comprador paga nem o que o criador recebe.</td></tr>
+<tr><td class="est">Valor pago</td><td>Preço de tabela + 5%. É o número que aparece no Express do comprador e na factura.</td></tr>
+<tr><td class="est">Valor recebido</td><td>Preço de tabela − 5%. É o número que entra na carteira do criador.</td></tr>
+<tr><td class="est">Retido</td><td>Dinheiro pago pelo comprador que ainda não é de ninguém. Não é levantável nem devolvível sem passar por um estado.</td></tr>
+<tr><td class="est">Disponível</td><td>Saldo aprovado, já do criador, pronto para levantar. É sobre isto que incide qualquer pedido de levantamento.</td></tr>
+<tr><td class="est">Libertado</td><td>Momento em que o retido passa a disponível. Acontece na aprovação, nunca na entrega.</td></tr>
+<tr><td class="est">Devolvido</td><td>Retorno ao comprador do valor pago na íntegra, incluindo a taxa dele. A NaDM não retém a sua parte em devoluções.</td></tr>
+<tr><td class="est">Revertido</td><td>Levantamento que não chegou ao banco e voltou ao saldo disponível. Nunca custa nada ao criador.</td></tr>
+<tr><td class="est">Travado</td><td>Saldo que existe mas não sai, por suspensão, disputa ou recuperação de conta em curso. Continua a ser do criador.</td></tr>
+</tbody>
+</table>
+
+<h2 style="font:1000 21px/1.2 'Nunito',system-ui;letter-spacing:-.03em;color:#16281e;margin:0 0 4px">4. Regras transversais</h2>
+<p style="font:700 13.5px/1.6 'Nunito',system-ui;color:rgba(22,40,30,.74);margin:0 0 14px;max-width:60ch">Sete regras que valem em todos os ecrãs e não pertencem a nenhuma máquina de estado em particular.</p>
+
+<ol style="margin:0 0 22px;padding-left:19px;font:700 13px/1.62 'Nunito',system-ui;color:#16281e">
+<li style="margin-bottom:8px"><strong>Prazos contam a partir da aceitação</strong>, não do pagamento. Um pedido feito à sexta com prazo de 3 dias e aceite no sábado entrega-se na terça.</li>
+<li style="margin-bottom:8px"><strong>O silêncio do comprador aprova.</strong> Dois dias após a entrega sem resposta liberta o dinheiro. O silêncio do criador nunca aprova nada — expira.</li>
+<li style="margin-bottom:8px"><strong>Uma alteração incluída por pedido</strong>, salvo definição diferente na oferta. A segunda entrega é final e não reabre o relógio.</li>
+<li style="margin-bottom:8px"><strong>Devoluções são sempre totais.</strong> Não existe devolução parcial em nenhum fluxo. Se a entrega é discutível, vai a disputa, não a meio pagamento.</li>
+<li style="margin-bottom:8px"><strong>Verificação de identidade só bloqueia a saída de dinheiro</strong>, nunca a entrada, nunca a publicação e nunca a compra.</li>
+<li style="margin-bottom:8px"><strong>Uma mensagem grátis por semana</strong> por par criador–comprador. Não acumula e não se transfere.</li>
+<li><strong>Toda a devolução e toda a retenção têm um prazo escrito no ecrã</strong> antes da acção que as pode desencadear, não depois.</li>
+</ol>
+
+<div style="background:#f1f3e9;border:1px solid rgba(22,40,30,.14);border-radius:14px;padding:15px 17px;margin:0 0 6px" class="cx">
+<div style="font:800 9.5px 'Nunito',system-ui;letter-spacing:.14em;text-transform:uppercase;color:rgba(22,40,30,.6);margin-bottom:8px">Fora do âmbito deste documento</div>
+<p style="font:700 12.5px/1.55 'Nunito',system-ui;color:rgba(22,40,30,.76);margin:0">Integração com a EMIS e o MULTICAIXA Express, obrigações fiscais e emissão de facturas certificadas em Angola, retenção na fonte sobre rendimentos de criadores, prazos legais de conservação de documentos de identidade, e consola interna de moderação. Cada um precisa de decisão jurídica ou contratual antes de virar ecrã.</p>
+</div>
+
+</doc-page>
+</x-dc>
+</body>
+</html>

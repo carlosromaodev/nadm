@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.next/
+coverage/
+*.log
+
+.env
+.env.local
+.env.*.local
+
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+.ngrok/
+apps/api/var/

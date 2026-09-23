@@ -1,0 +1,26 @@
+{
+  "name": "nadm",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:web": "npm run dev --workspace @nadm/web",
+    "dev:api": "npm run dev --workspace @nadm/api",
+    "dev:full": "node scripts/dev.mjs --ngrok",
+    "dev:setup": "node scripts/dev.mjs --setup-only",
+    "dev:check": "node scripts/dev.mjs --check",
+    "ngrok": "node scripts/ngrok.mjs",
+    "ngrok:domain": "node scripts/ngrok.mjs --domain",
+    "ngrok:url": "node scripts/ngrok.mjs --sync",
+    "ngrok:stop": "node scripts/ngrok.mjs --stop",
+    "test:scripts": "vitest run --config scripts/vitest.config.mts",
+    "build": "npm run build --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "engines": {
+    "node": ">=20.12"
+  }
+}
