@@ -214,9 +214,18 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
 
 /* ── As classes, com a duração e a curva de cada uma ───────────────────── */
 
-/** Espera: o único indicador de carregamento do sistema. */
+/**
+ * Espera: o único indicador de carregamento do sistema.
+ *
+ * **A flor gira sobre o seu próprio eixo, e não à volta de outro ponto.**
+ * `transform-box: fill-box` é o que o garante: sem ele, `transform-origin:
+ * center` resolve contra a caixa do SVG e não contra a forma, e a flor passa a
+ * orbitar um ponto fora de si — parece deslocar-se de um lado ao outro em vez
+ * de rodar. Com a caixa certa, o centro é o centro do próprio desenho.
+ */
 .anima-flor {
   animation: blobspin 2.4s linear infinite;
+  transform-box: fill-box;
   transform-origin: center;
 }
 

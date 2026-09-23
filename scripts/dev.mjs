@@ -1,4 +1,5 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
+import { readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { ROOT, WEB_URL, API_URL, exists, health, launch, loadLocalEnv, portAvailable, run, stopChildren, waitFor, children } from './local-runtime.mjs';
@@ -19,6 +20,26 @@ async function ensureEnv(relative, example) {
     console.info('Criado ' + relative + ' a partir do exemplo local.');
   }
 }
+/**
+ * Um build de produção em `.next` envenena o servidor de desenvolvimento.
+ *
+ * Os dois escrevem no mesmo directório com formatos diferentes, e o `next dev`
+ * reutiliza o que lá está: o resultado são manifestos incompatíveis e erros
+ * como «Could not find the module … in the React Client Manifest» ou «Cannot
+ * find module './383.js'» — que não dizem nada sobre a causa.
+ *
+ * `BUILD_ID` só existe depois de um `next build`. Se estiver lá, o directório
+ * é de produção e não serve para desenvolver: deita-se fora e reconstrói-se.
+ */
+async function clearProductionBuild() {
+  const next = new URL('../apps/web/.next/', import.meta.url);
+
+  if (!existsSync(new URL('BUILD_ID', next))) return;
+
+  console.info('Encontrado um build de produção em apps/web/.next; a limpar para o dev arrancar limpo.');
+  await rm(new URL('.', next), { recursive: true, force: true });
+}
+
 async function ensureService(port, url, name, workspace) {
   if (await health(url, name)) { console.info(name + ' já está pronto; a reutilizar.'); return; }
   if (!await portAvailable(port)) {
@@ -26,6 +47,8 @@ async function ensureService(port, url, name, workspace) {
     await waitFor(() => health(url, name), name + ' na porta ' + port + ' (ocupada)', 30_000);
     console.info(name + ' já está pronto; a reutilizar.'); return;
   }
+  if (workspace === '@nadm/web') await clearProductionBuild();
+
   const script = workspace === '@nadm/web' ? 'dev:server' : 'dev';
   const child = launch('npm', ['run', script, '--workspace', workspace], {
     env: { ...process.env, NODE_ENV: 'development', PORT: '3333', API_INTERNAL_URL: API_URL },
