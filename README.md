@@ -30,6 +30,9 @@ npm run dev        # Postgres (5436), API (3333) e frontend (3001)
 npm run dev:full   # o mesmo, e abre um túnel ngrok
 ```
 
+`npm run dev` dentro de `apps/api` levanta o projecto inteiro com o túnel — é o
+mesmo que `dev:full`, à mão de quem está a trabalhar no backend.
+
 ## Testar
 
 ```bash

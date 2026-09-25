@@ -27,8 +27,12 @@ Ver `.interface-design/system.md` e `docs/design-v2.md` para o delta da versão 
 **Arrancar:** na raiz, `npm run dev` prepara o Postgres (5436), gera o Prisma,
 aplica migrações sem reset e inicia API (3333) e frontend (3001). Instâncias
 saudáveis do NaDM são reutilizadas; processos de outros projetos não são mortos.
-`npm run dev:full` faz o mesmo e abre/sincroniza ngrok sem palavra-passe. A porta 3000
-fica para outro projecto. Ver `docs/desenvolvimento.md` para todos os comandos.
+`npm run dev:full` faz o mesmo e abre/sincroniza ngrok sem palavra-passe, e
+`npm run dev` **dentro de `apps/api`** é equivalente a esse. A porta 3000 fica
+para outro projecto. Ver `docs/desenvolvimento.md` para todos os comandos.
+
+Em cada workspace, **`dev` orquestra e `dev:server` corre**. O orquestrador
+lança sempre `dev:server`; lançar `dev` punha-o a chamar-se a si próprio.
 
 **Testar:** `npm test` corre os testes de domínio e de caso de uso, sem base de
 dados. `npm run test:e2e` corre a verificação ponta a ponta contra Postgres real

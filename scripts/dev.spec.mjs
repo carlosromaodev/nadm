@@ -92,6 +92,28 @@ describe('arranque do frontend pela raiz e por apps/web', () => {
     expect(web.scripts['dev:server']).toBe('next dev --hostname 127.0.0.1 --port 3001');
   });
 
+  it('arrancar pelo backend levanta o projecto inteiro, com túnel', async () => {
+    const api = JSON.parse(await readFile(new URL('../apps/api/package.json', import.meta.url), 'utf8'));
+
+    // `npm run dev` dentro de apps/api tem de dar API, frontend e ngrok — é o
+    // que faz do directório do backend um sítio de onde se arranca o projecto.
+    expect(api.scripts.dev).toBe('node ../../scripts/dev.mjs --ngrok');
+    expect(api.scripts['dev:server']).toBe('nest start --watch');
+  });
+
+  it('nenhum `dev` de workspace pode ser lançado pelo orquestrador', async () => {
+    // O invariante que impede a recursão: `dev` orquestra, `dev:server` corre.
+    // Quem lançar `dev` daqui põe o orquestrador a chamar-se a si próprio.
+    for (const workspace of ['api', 'web']) {
+      const pkg = JSON.parse(
+        await readFile(new URL(`../apps/${workspace}/package.json`, import.meta.url), 'utf8'),
+      );
+
+      expect(pkg.scripts.dev).toContain('scripts/dev.mjs');
+      expect(pkg.scripts['dev:server']).not.toContain('scripts/dev.mjs');
+    }
+  });
+
   it('o arranque completo também usa o comando interno sem recursão', async () => {
     runtime.launch.mockReturnValue(Object.assign(new EventEmitter(), { exitCode: null }));
     runtime.health.mockResolvedValueOnce(true).mockResolvedValueOnce(false);

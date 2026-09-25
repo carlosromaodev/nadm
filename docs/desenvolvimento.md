@@ -9,6 +9,13 @@ npm run dev:full     # O mesmo + ngrok sem palavra-passe
 npm run dev:check    # Verifica frontend, API e proxy
 ```
 
+**Também se arranca de dentro do backend.** `npm run dev` em `apps/api` levanta
+o projecto inteiro — Postgres, migrações, API, frontend **e o túnel do ngrok**.
+É o mesmo que `npm run dev:full` na raiz, e existe porque o directório do
+backend é onde se está a trabalhar quando se quer ver o resultado no telemóvel.
+
+Para correr só a API, sem Docker nem migrações: `npm run dev:api` na raiz.
+
 O frontend fica em **http://localhost:3001**, a API em
 **http://127.0.0.1:3333/api** e o Postgres na porta **5436**.
 A porta 3000 continua livre para outros projetos.
@@ -36,8 +43,13 @@ A API só fica pronta se conseguir consultar a base de dados.
 Dentro de `apps/web`, `npm run dev` inicia apenas o frontend ou reutiliza o
 NaDM já ativo na porta 3001. É equivalente a `npm run dev:web` na raiz; não
 inicia Docker nem aplica migrações. Se a API não estiver disponível, mostra
-como iniciar o projeto completo. `dev:server` é o comando interno do Next;
-use `dev` no dia a dia para evitar tentar abrir uma segunda instância.
+como iniciar o projeto completo.
+
+**`dev` orquestra, `dev:server` corre.** Em ambos os workspaces, `dev` é o
+comando do dia a dia e chama `scripts/dev.mjs`; `dev:server` é o servidor em si
+— `next dev` e `nest start --watch` — e é o único que o orquestrador lança.
+Lançar `dev` a partir dele punha-o a chamar-se a si próprio, sem fim, e há um
+teste em `scripts/dev.spec.mjs` que trava essa inversão.
 
 ## Funções ngrok trazidas do Bizy
 

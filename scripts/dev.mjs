@@ -49,8 +49,12 @@ async function ensureService(port, url, name, workspace) {
   }
   if (workspace === '@nadm/web') await clearProductionBuild();
 
-  const script = workspace === '@nadm/web' ? 'dev:server' : 'dev';
-  const child = launch('npm', ['run', script, '--workspace', workspace], {
+  // Sempre `dev:server`, nunca `dev`.
+  //
+  // O `dev` de cada workspace é o orquestrador — é isto. Lançar `dev` daqui
+  // punha-o a chamar-se a si próprio, sem fim. `dev:server` é o servidor em si,
+  // e é o único que faz sentido a partir daqui.
+  const child = launch('npm', ['run', 'dev:server', '--workspace', workspace], {
     env: { ...process.env, NODE_ENV: 'development', PORT: '3333', API_INTERNAL_URL: API_URL },
   });
   child.on('error', error => { console.error(name + ': ' + error.message); stop(1); });
