@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs';
 import { readFile, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { ROOT, WEB_URL, API_URL, exists, health, launch, loadLocalEnv, portAvailable, run, stopChildren, waitFor, children } from './local-runtime.mjs';
+import { ROOT, WEB_URL, API_URL, exists, health, launch, loadLocalEnv, portAvailable, reclaimProjectPort, run, stopChildren, waitFor, children } from './local-runtime.mjs';
 
 let stopping = false;
 let ownedTunnel = false;
@@ -43,9 +43,16 @@ async function clearProductionBuild() {
 async function ensureService(port, url, name, workspace) {
   if (await health(url, name)) { console.info(name + ' já está pronto; a reutilizar.'); return; }
   if (!await portAvailable(port)) {
-    // A project watcher can be restarting. Give it time, but never kill an unknown listener.
-    await waitFor(() => health(url, name), name + ' na porta ' + port + ' (ocupada)', 30_000);
-    console.info(name + ' já está pronto; a reutilizar.'); return;
+    // Um watcher pode estar apenas a recompilar. Dá-lhe uma margem curta; se
+    // continuar sem saúde, recupera apenas processos confirmados deste repo.
+    try {
+      await waitFor(() => health(url, name), name + ' na porta ' + port + ' (ocupada)', 10_000);
+      console.info(name + ' já está pronto; a reutilizar.'); return;
+    } catch {
+      if (!await reclaimProjectPort(port, name, workspace)) {
+        throw new Error(`A porta ${port} está ocupada por outro processo. Fecha-o ou configura outra porta; nenhum processo desconhecido foi terminado.`);
+      }
+    }
   }
   if (workspace === '@nadm/web') await clearProductionBuild();
 
@@ -85,24 +92,46 @@ try {
     if (!await exists(resolve(ROOT, 'node_modules/next/package.json'))) throw new Error('Dependências em falta. Execute npm ci na raiz do projeto.');
     await ensureEnv('apps/api/.env', 'apps/api/.env.example');
     await ensureEnv('apps/web/.env.local', 'apps/web/.env.example');
-    if (!args.includes('--no-docker')) {
-      console.info('A preparar o PostgreSQL do NaDM (sem apagar dados)…');
-      await run('docker', ['compose', 'up', '-d', '--wait', '--wait-timeout', '60', 'postgres']);
-    }
-    await run('npm', ['run', 'db:generate', '--workspace', '@nadm/api']);
-    await run('npm', ['run', 'db:migrate', '--workspace', '@nadm/api']);
-    if (!args.includes('--setup-only')) {
-      await ensureService(3333, API_URL + '/health', 'nadm-api', '@nadm/api');
-      await ensureService(3001, WEB_URL + '/health', 'nadm-web', '@nadm/web');
-      await waitFor(() => health(WEB_URL + '/api/health', 'nadm-api'), 'ligação frontend → API', 30_000);
+    const apiWasReady = !args.includes('--setup-only') && await health(API_URL + '/health', 'nadm-api');
+    const webWasReady = apiWasReady && await health(WEB_URL + '/health', 'nadm-web');
+    const proxyWasReady = webWasReady && await health(WEB_URL + '/api/health', 'nadm-api');
+
+    // Não executar `prisma generate` por baixo de uma API viva: o watcher vê
+    // os ficheiros gerados, reinicia e abre uma janela em que outro processo
+    // pode tentar ocupar a mesma porta. Um projecto saudável não precisa de
+    // preparação repetida — limita-se a ser reutilizado.
+    if (apiWasReady && webWasReady && proxyWasReady) {
       if (args.includes('--ngrok')) {
         const { startTunnel } = await import('./ngrok.mjs');
         const result = await startTunnel();
         ownedTunnel = result.started;
       }
       console.info('\nNaDM pronto: http://localhost:3001 · API ' + API_URL);
-      console.info(children.size ? 'Ctrl+C encerra apenas os servidores iniciados por este comando.' : 'As instâncias existentes foram reutilizadas; não foi criado nenhum servidor duplicado.');
-    } else console.info('Preparação concluída. Execute npm run dev ou npm run dev:full.');
+      console.info('As instâncias existentes foram reutilizadas; não foi criado nenhum servidor duplicado.');
+    } else {
+      if (!apiWasReady || args.includes('--setup-only')) {
+        if (!args.includes('--no-docker')) {
+          console.info('A preparar o PostgreSQL do NaDM (sem apagar dados)…');
+          await run('docker', ['compose', 'up', '-d', '--wait', '--wait-timeout', '60', 'postgres']);
+        }
+        await run('npm', ['run', 'db:generate', '--workspace', '@nadm/api']);
+        await run('npm', ['run', 'db:migrate', '--workspace', '@nadm/api']);
+      } else {
+        console.info('nadm-api já está pronta; a preparação da base foi ignorada para não reiniciar o watcher.');
+      }
+      if (!args.includes('--setup-only')) {
+        await ensureService(3333, API_URL + '/health', 'nadm-api', '@nadm/api');
+        await ensureService(3001, WEB_URL + '/health', 'nadm-web', '@nadm/web');
+        await waitFor(() => health(WEB_URL + '/api/health', 'nadm-api'), 'ligação frontend → API', 30_000);
+        if (args.includes('--ngrok')) {
+          const { startTunnel } = await import('./ngrok.mjs');
+          const result = await startTunnel();
+          ownedTunnel = result.started;
+        }
+        console.info('\nNaDM pronto: http://localhost:3001 · API ' + API_URL);
+        console.info(children.size ? 'Ctrl+C encerra apenas os servidores iniciados por este comando.' : 'As instâncias existentes foram reutilizadas; não foi criado nenhum servidor duplicado.');
+      } else console.info('Preparação concluída. Execute npm run dev ou npm run dev:full.');
+    }
   }
 } catch (error) {
   console.error('\nFalha no arranque: ' + error.message);

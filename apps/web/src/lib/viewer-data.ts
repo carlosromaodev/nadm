@@ -33,6 +33,10 @@ export interface ContentItem {
   media: Array<{ id: string; url: string; mimeType: string; title?: string }>;
 }
 
+export interface FeedItem extends ContentItem {
+  creator: Pick<ViewerProfile, 'id' | 'handle' | 'displayName' | 'avatarUrl'>;
+}
+
 export function errorMessage(error: unknown): string {
   if (error instanceof ApiError) return error.message;
   return 'Não foi possível ligar. Verifica a ligação e tenta novamente.';
@@ -67,6 +71,56 @@ export function useResource<T>(path: string | null, actorUserId?: string | null)
 export function useBuyerDeals() {
   const { userId, ready } = useSession();
   return useResource<{ data: Deal[] }>(ready && userId ? '/deals?role=buyer' : null, userId);
+}
+
+/**
+ * Junta as publicações recentes dos perfis descobertos. O servidor continua a
+ * decidir que media o espectador pode ver; o cliente apenas agrega as respostas
+ * públicas de cada perfil para compor o início.
+ */
+export function useCreatorFeed(profiles: ViewerProfile[]) {
+  const { userId } = useSession();
+  const handles = profiles.map((profile) => profile.handle).join(',');
+  const [data, setData] = useState<FeedItem[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    const selected = profiles.slice(0, 12);
+    if (!selected.length) { setData([]); setLoading(false); return; }
+
+    setLoading(true);
+    void Promise.all(selected.map(async (creator) => {
+      try {
+        const response = await api<{ items: ContentItem[] }>(
+          `/profiles/${encodeURIComponent(creator.handle)}/content`,
+          { actorUserId: userId },
+        );
+        return response.items.map((item): FeedItem => ({
+          ...item,
+          creator: {
+            id: creator.id,
+            handle: creator.handle,
+            displayName: creator.displayName,
+            avatarUrl: creator.avatarUrl,
+          },
+        }));
+      } catch {
+        // Um perfil indisponível não deve apagar o feed dos restantes.
+        return [];
+      }
+    })).then((groups) => {
+      if (!active) return;
+      setData(groups.flat().sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt)).slice(0, 18));
+      setLoading(false);
+    });
+
+    return () => { active = false; };
+    // `handles` representa precisamente o conjunto que alimenta o pedido.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handles, userId]);
+
+  return { data, loading };
 }
 
 /** Personal preferences on this browser, never an authorisation or paid grant. */

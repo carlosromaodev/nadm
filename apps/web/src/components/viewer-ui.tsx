@@ -26,16 +26,18 @@ export function LoadError({ message, retry, title = 'Não foi possível carregar
   </div>;
 }
 
-export function Avatar({ name, large = false }: { name: string; large?: boolean }) {
+export function Avatar({ name, url, large = false }: { name: string; url?: string | null; large?: boolean }) {
   const initials = name.trim().split(/\s+/).slice(0, 2).map((word) => word[0]).join('').toLocaleUpperCase('pt');
-  return <span aria-hidden="true" className={`flex shrink-0 items-center justify-center rounded-full border border-line bg-surface2 font-[1000] text-lime-text ${large ? 'size-[82px] text-[26px]' : 'size-[48px] text-[17px]'}`}>{initials || 'N'}</span>;
+  return <span aria-hidden="true" className={`flex shrink-0 items-center justify-center overflow-hidden rounded-full border border-line bg-surface2 font-[1000] text-lime-text ${large ? 'size-[82px] text-[26px]' : 'size-[48px] text-[17px]'}`}>
+    {url ? <img src={url} alt="" className="size-full object-cover" /> : initials || 'N'}
+  </span>;
 }
 
 export function ProfileCard({ profile }: { profile: ViewerProfile }) {
   const cheapest = profile.offers.reduce<ViewerProfile['offers'][number] | undefined>((previous, offer) =>
     !previous || BigInt(offer.price.amount) < BigInt(previous.price.amount) ? offer : previous, undefined);
   return <Link href={`/${profile.handle}`} className="flex items-center gap-3 rounded-[24px] border border-line bg-surface p-[13px] hover:bg-surface2">
-    <span className="relative"><Avatar name={profile.displayName} /><span className={`absolute right-0 bottom-0 size-3 rounded-full border-2 border-surface ${profile.availabilityStatus === 'AVAILABLE' ? 'bg-lime' : 'bg-amber'}`} /></span>
+    <span className="relative"><Avatar name={profile.displayName} url={profile.avatarUrl} /><span className={`absolute right-0 bottom-0 size-3 rounded-full border-2 border-surface ${profile.availabilityStatus === 'AVAILABLE' ? 'bg-lime' : 'bg-amber'}`} /></span>
     <span className="min-w-0 flex-1"><span className="block truncate text-[14px] font-[900]">{profile.displayName}</span><span className="mt-0.5 block truncate text-[11.5px] font-[700] text-dim">{[profile.category, profile.location].filter(Boolean).join(' · ') || `@${profile.handle}`}</span><span className="mt-1.5 block text-[10.5px] font-[800] text-dim">{profile.availabilityStatus === 'AVAILABLE' ? 'A aceitar pedidos' : profile.availabilityStatus === 'PAUSED' ? 'Em pausa' : 'Sem vagas'}</span></span>
     {cheapest && <span className="shrink-0 text-right"><span className="block text-[9px] font-[800] uppercase tracking-wider text-dim">desde</span><span className="algarismos text-[14px] font-[1000]">{formatMoney(cheapest.price)}</span></span>}
   </Link>;

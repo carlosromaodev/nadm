@@ -11,6 +11,8 @@ export interface ProfileSettings {
   theme?: 'dark' | 'light';
   category?: string;
   location?: string;
+  /** Fotografia pública do criador. Nas sementes aponta para um asset local. */
+  avatarUrl?: string;
   whoCanMessage?: 'everyone' | 'members' | 'customers';
   showActivity?: boolean;
   showReviews?: boolean;

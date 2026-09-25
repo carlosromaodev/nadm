@@ -1,14 +1,16 @@
-import { spawn } from 'node:child_process';
-import { readFile, writeFile, access } from 'node:fs/promises';
+import { execFile, spawn } from 'node:child_process';
+import { readFile, writeFile, access, readlink } from 'node:fs/promises';
 import { createServer } from 'node:net';
 import { fileURLToPath } from 'node:url';
-import { resolve } from 'node:path';
+import { resolve, sep } from 'node:path';
+import { promisify } from 'node:util';
 
 export const ROOT = fileURLToPath(new URL('../', import.meta.url));
 export const WEB_URL = 'http://127.0.0.1:3001';
 export const API_URL = 'http://127.0.0.1:3333/api';
 export const children = new Set();
 export const delay = ms => new Promise(resolveDelay => setTimeout(resolveDelay, ms));
+const execFileAsync = promisify(execFile);
 export async function exists(path) { try { await access(path); return true; } catch { return false; } }
 
 /** Read dotenv values without executing a shell script or exposing secrets. */
@@ -46,6 +48,80 @@ export async function portAvailable(port) {
     server.once('error', error => error.code === 'EADDRINUSE' ? resolvePort(false) : reject(new Error(`Não foi possível verificar a porta ${port}: ${error.code}.`)));
     server.listen(port, '127.0.0.1', () => server.close(() => resolvePort(true)));
   });
+}
+
+async function linuxProcess(pid) {
+  try {
+    const [cwd, cmdline, stat] = await Promise.all([
+      readlink(`/proc/${pid}/cwd`),
+      readFile(`/proc/${pid}/cmdline`),
+      readFile(`/proc/${pid}/stat`, 'utf8'),
+    ]);
+    const fields = stat.slice(stat.lastIndexOf(')') + 2).trim().split(/\s+/);
+    return {
+      pid,
+      cwd,
+      command: cmdline.toString('utf8').replaceAll('\0', ' ').trim(),
+      processGroup: Number(fields[2]),
+    };
+  } catch { return null; }
+}
+
+async function linuxPortOwners(port) {
+  try {
+    const { stdout } = await execFileAsync('fuser', ['-n', 'tcp', String(port)]);
+    return [...new Set(stdout.trim().split(/\s+/).map(Number).filter(Number.isSafeInteger))];
+  } catch (error) {
+    // `fuser` usa código 1 para "ninguém está a usar esta porta".
+    if (error?.code === 1) return [];
+    return null;
+  }
+}
+
+function inside(path, parent) {
+  const normalizedPath = resolve(path);
+  const normalizedParent = resolve(parent);
+  return normalizedPath === normalizedParent || normalizedPath.startsWith(normalizedParent + sep);
+}
+
+/**
+ * Liberta uma porta somente quando todos os listeners são watchers deste
+ * repositório e do workspace esperado. Nunca termina processos desconhecidos.
+ */
+export async function reclaimProjectPort(port, name, workspace) {
+  if (process.platform !== 'linux') return false;
+  const pids = await linuxPortOwners(port);
+  if (!pids?.length) return await portAvailable(port);
+
+  const workspaceDir = resolve(ROOT, 'apps', workspace === '@nadm/web' ? 'web' : 'api');
+  const expected = workspace === '@nadm/web' ? /(?:next(?:-server)?|node .*next)/i : /(?:nest|node .*main)/i;
+  const owners = await Promise.all(pids.map(linuxProcess));
+  if (owners.some(owner => !owner || !inside(owner.cwd, workspaceDir) || !expected.test(owner.command))) return false;
+
+  const groups = [...new Set(owners.map(owner => owner.processGroup).filter(group => group > 1))];
+  for (const group of groups) {
+    const leader = await linuxProcess(group);
+    if (!leader || !inside(leader.cwd, ROOT) || !/(?:npm|node|next|nest)/i.test(leader.command)) return false;
+  }
+
+  console.info(`${name} antigo detectado na porta ${port}; a encerrar o watcher obsoleto deste projeto.`);
+  for (const group of groups) {
+    try { process.kill(-group, 'SIGTERM'); } catch { /* Já terminou. */ }
+  }
+  for (let attempt = 0; attempt < 50; attempt += 1) {
+    if (await portAvailable(port)) return true;
+    await delay(100);
+  }
+
+  // Um watcher confirmado como nosso pode ter ficado preso a ignorar SIGTERM.
+  for (const group of groups) {
+    try { process.kill(-group, 'SIGKILL'); } catch { /* Já terminou. */ }
+  }
+  for (let attempt = 0; attempt < 30; attempt += 1) {
+    if (await portAvailable(port)) return true;
+    await delay(100);
+  }
+  return false;
 }
 export async function health(url, service) {
   try {

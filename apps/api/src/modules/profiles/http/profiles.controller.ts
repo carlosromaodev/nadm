@@ -29,6 +29,7 @@ function presentProfile(profile: Profile) {
     publishedAt: profile.publishedAt?.toISOString() ?? null,
     category: profile.settings?.category ?? null,
     location: profile.settings?.location ?? null,
+    avatarUrl: profile.settings?.avatarUrl ?? null,
     theme: profile.settings?.theme ?? 'dark',
     tabOrder: profile.settings?.tabOrder ?? ['content', 'offers', 'reputation'],
   };

@@ -99,6 +99,7 @@ export interface PublicProfile {
   handle: string;
   displayName: string;
   bio: string | null;
+  avatarUrl?: string | null;
   availabilityStatus: 'AVAILABLE' | 'NO_SLOTS' | 'PAUSED';
   offers: Offer[];
 }

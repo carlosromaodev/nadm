@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { semearCriadores } from './seed-creators';
 
 const prisma = new PrismaClient();
 
@@ -67,8 +68,10 @@ async function main(): Promise<void> {
     });
   }
 
+  const publicadas = await semearCriadores(prisma);
+
   const offer = await prisma.offer.findFirstOrThrow({
-    where: { profile: { handle: 'nelsonbeats' } },
+    where: { profile: { handle: 'nelsonbeats' }, kind: { not: 'CONTENT_UNLOCK' } },
   });
 
   console.log('Semente aplicada.');
@@ -76,6 +79,10 @@ async function main(): Promise<void> {
   console.log(`  comprador X-Dev-User: ${BUYER_ID}`);
   console.log(`  terceiro  X-Dev-User: ${OUTSIDER_ID}  (usar para provar o 404)`);
   console.log(`  oferta:   ${offer.id}`);
+
+  const criadores = await prisma.profile.count({ where: { publishedAt: { not: null } } });
+  console.log(`  ${criadores} criadores publicados, ${publicadas} publicações novas com imagem.`);
+  console.log('  Entra como espectador e abre /descobrir para os ver.');
 }
 
 main()
