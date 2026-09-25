@@ -18,6 +18,7 @@ import { ProfilesModule } from './modules/profiles/profiles.module';
 import { SharedModule } from './shared/shared.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
 import { HealthController } from './core/http/health.controller';
+import { DirectMessagesModule } from './modules/direct-messages/direct-messages.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { HealthController } from './core/http/health.controller';
     ReviewsModule,
     OpsModule,
     NotificationsModule,
+    DirectMessagesModule,
   ],
   controllers: [HealthController],
   providers: [

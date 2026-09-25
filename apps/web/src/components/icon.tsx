@@ -37,6 +37,9 @@ const paths = {
   briefcase: 'M4 7h16v13H4z M8 7V4h8v3 M4 12h16 M10 12v3h4v-3',
   shield: 'M12 4.4 19.6 7v5.4c0 4-3.2 6.6-7.6 7.8-4.4-1.2-7.6-3.8-7.6-7.8V7z M8.5 12l2.5 2.5 4.5-5',
   check: 'M6.5 12.5 10.4 16.5 17.5 8',
+  heart: 'M20.8 9.2c0 5-8.8 10.4-8.8 10.4S3.2 14.2 3.2 9.2A4.7 4.7 0 0 1 12 6.8a4.7 4.7 0 0 1 8.8 2.4Z',
+  more: 'M5 12h.01 M12 12h.01 M19 12h.01',
+  send: 'M21.5 2.5 11 13 M21.5 2.5 15 21.5 11 13 2.5 9Z',
 } as const;
 export type IconName = keyof typeof paths;
 export function Icon({ name, className = 'size-5', ...props }: SVGProps<SVGSVGElement> & { name: IconName }) {

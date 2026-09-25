@@ -239,6 +239,10 @@ export async function semearCriadores(prisma: PrismaClient): Promise<number> {
               category: criador.categoria,
               location: criador.cidade,
               avatarUrl: criador.avatarUrl,
+              responseTimeHours: [2, 4, 1, 12, 6][indice],
+              completedDeals: [48, 31, 76, 19, 54][indice],
+              acceptsBrands: indice !== 1,
+              verified: indice < 4,
             } as Prisma.InputJsonValue,
           },
         });
@@ -265,6 +269,10 @@ export async function semearCriadores(prisma: PrismaClient): Promise<number> {
               category: criador.categoria,
               location: criador.cidade,
               avatarUrl: criador.avatarUrl,
+              responseTimeHours: [2, 4, 1, 12, 6][indice],
+              completedDeals: [48, 31, 76, 19, 54][indice],
+              acceptsBrands: indice !== 1,
+              verified: indice < 4,
             },
             offers: {
               create: criador.ofertas.map((oferta) => ({

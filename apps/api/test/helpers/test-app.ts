@@ -78,6 +78,7 @@ export async function resetDatabase(): Promise<void> {
         ledger_entries, ledger_transactions, wallets,
         payment_events, payment_intents, idempotency_keys,
         payouts, identity_verifications,
+        direct_messages, direct_conversations,
         deal_counter_offers, deliveries, messages, deals,
         reviews, content_grants, content_items, media,
         offers, profiles,

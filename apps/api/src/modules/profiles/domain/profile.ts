@@ -13,6 +13,11 @@ export interface ProfileSettings {
   location?: string;
   /** Fotografia pública do criador. Nas sementes aponta para um asset local. */
   avatarUrl?: string;
+  /** Sinais públicos e editáveis usados na descoberta. */
+  responseTimeHours?: number;
+  completedDeals?: number;
+  acceptsBrands?: boolean;
+  verified?: boolean;
   whoCanMessage?: 'everyone' | 'members' | 'customers';
   showActivity?: boolean;
   showReviews?: boolean;

@@ -67,6 +67,8 @@ model User {
   findingsResolved      ReconciliationFinding[] @relation("FindingResolver")
   notifications         NotificationDelivery[]
   auditLogs             AuditLog[]
+  directConversations   DirectConversation[]    @relation("DirectConversationBuyer")
+  directMessages        DirectMessage[]
 
   @@map("users")
 }
@@ -114,6 +116,7 @@ model Profile {
   wallet  Wallet?
   payouts Payout[]
   windows AvailabilityWindow[]
+  directConversations DirectConversation[]
 
   @@index([availabilityStatus, publishedAt])
   @@map("profiles")
@@ -361,6 +364,43 @@ model Message {
   @@index([dealId, createdAt(sort: Desc)])
   @@index([dealId, seq])
   @@map("messages")
+}
+
+/// Conversa leve que existe antes de qualquer pedido pago. É deliberadamente
+/// separada de `Message`: não tem escrow, prazo, entrega nem estado de Deal.
+model DirectConversation {
+  id               String   @id @default(uuid()) @db.Uuid
+  buyerUserId      String   @map("buyer_user_id") @db.Uuid
+  creatorProfileId String   @map("creator_profile_id") @db.Uuid
+  lastMessageAt    DateTime @map("last_message_at") @db.Timestamptz(3)
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz(3)
+
+  buyer          User            @relation("DirectConversationBuyer", fields: [buyerUserId], references: [id])
+  creatorProfile Profile         @relation(fields: [creatorProfileId], references: [id])
+  messages       DirectMessage[]
+
+  @@unique([buyerUserId, creatorProfileId])
+  @@index([buyerUserId, lastMessageAt(sort: Desc)])
+  @@index([creatorProfileId, lastMessageAt(sort: Desc)])
+  @@map("direct_conversations")
+}
+
+model DirectMessage {
+  id             String   @id @default(uuid()) @db.Uuid
+  conversationId String   @map("conversation_id") @db.Uuid
+  senderUserId   String   @map("sender_user_id") @db.Uuid
+  body           String
+  clientId       String   @map("client_id")
+  readAt         DateTime? @map("read_at") @db.Timestamptz(3)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  conversation DirectConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender       User               @relation(fields: [senderUserId], references: [id])
+
+  @@unique([conversationId, clientId])
+  @@index([conversationId, createdAt])
+  @@map("direct_messages")
 }
 
 model Delivery {

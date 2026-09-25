@@ -625,6 +625,21 @@ desde a proposta, e é isso que garante que ninguém trabalha sem garantia.
 **E1** Não é parte do `Deal` → 404, não 403, para não confirmar a existência do recurso (RN-063).
 **E2** `Deal` terminal há mais de 30 dias → 422, conversa fechada.
 
+### UC-06b · Enviar uma DM gratuita
+*Actor:* Comprador, Criador · *Pré:* autenticado; perfil publicado
+
+**N** 1. O comprador abre a DM do perfil. 2. Envia texto. 3. O sistema cria ou reutiliza a conversa única do par e guarda a mensagem. 4. O criador pode responder sem limite nesta conversa.
+**A1** O cliente repete o envio com o mesmo `clientId`: recebe a conversa existente e não duplica a mensagem.
+**E1** O comprador tenta enviar outra mensagem antes de decorrerem sete dias → 422 com `nextFreeAt` (RN-065).
+**E2** Tenta conversar consigo próprio → 403.
+**E3** Não é participante da conversa → 404, sem confirmar a sua existência.
+
+`DirectConversation` é separada da conversa do `Deal`: uma DM grátis não cria
+escrow, prazo, entrega ou obrigação de resposta. O comprador pode enviar **uma
+mensagem a cada sete dias por criador**, sem acumulação; a verificação é
+serializada por conversa para duas tentativas simultâneas não atravessarem o
+limite (RN-065).
+
 ### UC-07 · Entregar
 *Actor:* Criador · *Pré:* `Deal` em `ACCEPTED` ou `IN_PROGRESS`
 
@@ -816,6 +831,8 @@ PostgreSQL. Chaves `uuid`. Datas `timestamptz`. Dinheiro `bigint` + `char(3)`. E
 | `availability_windows` | `id` | `profile_id`, `offer_id`, `starts_at`, `ends_at`, `slots_total`, `slots_taken` | `EXCLUDE USING gist (offer_id WITH =, tstzrange(starts_at, ends_at) WITH &&)` |
 | **`deals`** | `id` | `reference`, `buyer_user_id`, `buyer_account_id`, `creator_profile_id`, `offer_id`, `offer_snapshot jsonb`, `status`, `escrow_status`, `amount_minor`, `platform_fee_minor`, `creator_net_minor`, `due_at`, `expires_at`, `last_message_at` | `UNIQUE(reference)`; `INDEX(creator_profile_id, status, created_at DESC)`; `INDEX(buyer_user_id, status)`; `INDEX(status, expires_at) WHERE status IN ('PROPOSED','ACCEPTED')`; `CHECK(amount_minor = platform_fee_minor + creator_net_minor)` |
 | `messages` | `id` | `deal_id`, `sender_user_id`, `kind`, `body`, `read_at` | `INDEX(deal_id, created_at DESC)` |
+| `direct_conversations` | `id` | `buyer_user_id`, `creator_profile_id`, `last_message_at` | `UNIQUE(buyer_user_id, creator_profile_id)`, índices de caixa por participante |
+| `direct_messages` | `id` | `conversation_id`, `sender_user_id`, `body`, `client_id`, `read_at` | `UNIQUE(conversation_id, client_id)`, `INDEX(conversation_id, created_at)` |
 | `message_attachments` | `id` | `message_id`, `media_id` | `INDEX(message_id)` |
 | `deliveries` | `id` | `deal_id`, `version`, `note`, `submitted_at`, `accepted_at`, `rejected_at` | `UNIQUE(deal_id, version)` |
 | `delivery_assets` | `id` | `delivery_id`, `media_id` | `INDEX(delivery_id)` |
@@ -875,6 +892,7 @@ fatias e a primeira passou a atravessar o ciclo inteiro. **O que está aplicado:
 | 019 | `reconciliation` | F10 | `reconciliation_findings` com único parcial por divergência aberta; suspensão de conta com motivo |
 | 020 | `notifications` | F9 | `notification_deliveries` com chave de idempotência única; `outbox_events.last_error` e índice parcial da fila |
 | 021 | `content_unlock` | F3 | `offers.content_item_id` com único parcial e `CHECK`: a oferta que desbloqueia uma publicação paga |
+| 022 | `direct_messages` | F11 | DM gratuita separada de pedidos, com conversa única por par e envio idempotente |
 
 **Por aplicar**, com a fatia que as traz: `invoices` (F8).
 
@@ -987,6 +1005,19 @@ rota), e reordenar itens de uma playlist depois de criada (RN-023).
 | `POST` | `/deals/:id/review` | `rating`, `body` | avaliação | 👤 comprador | 409 já avaliado, 422 RN-047 |
 
 `clientId` na criação de mensagem é a chave de idempotência do lado do cliente: reenviar a mesma devolve a mensagem já criada, o que resolve o duplo envio em rede instável.
+
+### 9.5b DM gratuita
+
+| Método | Rota | Entrada | Saída | Acesso | Erros |
+|---|---|---|---|---|---|
+| `GET` | `/profiles/:handle/direct-messages` | — | conversa do par ou estado vazio | 🔑 comprador | 403 consigo próprio, 404 perfil |
+| `POST` | `/profiles/:handle/direct-messages` | `body`, `clientId` | conversa actualizada | 🔑 comprador | 422 limite semanal |
+| `GET` | `/direct-conversations` | — | caixa de DMs do utilizador | 🔑 participante | — |
+| `GET` | `/direct-conversations/:id` | — | conversa | 🤝 | 404 sem acesso |
+| `POST` | `/direct-conversations/:id/messages` | `body`, `clientId` | conversa actualizada | 🤝 | 404 sem acesso, 422 limite do comprador |
+
+O limite de uma mensagem grátis a cada sete dias aplica-se apenas ao comprador;
+as respostas do criador não o consomem. `clientId` é único dentro da conversa.
 
 `/counter-offers/accept` devolve `outcome`: `settled` quando o acordo mudou e o
 escrow já vale o valor novo, ou `top_up_required` com quanto falta reforçar. No

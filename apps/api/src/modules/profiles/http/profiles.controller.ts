@@ -30,6 +30,10 @@ function presentProfile(profile: Profile) {
     category: profile.settings?.category ?? null,
     location: profile.settings?.location ?? null,
     avatarUrl: profile.settings?.avatarUrl ?? null,
+    responseTimeHours: profile.settings?.responseTimeHours ?? null,
+    completedDeals: profile.settings?.completedDeals ?? 0,
+    acceptsBrands: profile.settings?.acceptsBrands ?? false,
+    verified: profile.settings?.verified ?? false,
     theme: profile.settings?.theme ?? 'dark',
     tabOrder: profile.settings?.tabOrder ?? ['content', 'offers', 'reputation'],
   };

@@ -10,8 +10,30 @@ export interface ViewerProfile extends PublicProfile {
   location?: string | null;
   theme?: 'dark' | 'light';
   tabOrder?: Array<'content' | 'offers' | 'reputation'>;
+  responseTimeHours?: number | null;
+  completedDeals?: number;
+  acceptsBrands?: boolean;
+  verified?: boolean;
   /** As vagas por acontecer, já filtradas pelo servidor. */
   windows?: AvailabilityWindow[];
+}
+
+export interface DirectConversation {
+  id: string | null;
+  viewerRole?: 'buyer' | 'creator';
+  creator?: Pick<ViewerProfile, 'id' | 'handle' | 'displayName' | 'avatarUrl'>;
+  buyer?: { id: string; displayName: string };
+  lastMessageAt?: string;
+  canSendFree: boolean;
+  nextFreeAt: string | null;
+  messages: Array<{
+    id: string;
+    senderUserId: string;
+    body: string;
+    clientId: string;
+    readAt: string | null;
+    createdAt: string;
+  }>;
 }
 
 /** Only server-authorised media URLs belong in this response. */

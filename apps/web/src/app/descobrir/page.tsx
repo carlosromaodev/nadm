@@ -26,6 +26,7 @@ function Discover() {
   const affordable = search.get('affordable') === '1';
   const luanda = search.get('city') === 'Luanda';
   const video = search.get('video') === '1';
+  const brands = search.get('brands') === '1';
   const [input, setInput] = useState(query);
   const recent = useLocalSelection('recent-searches');
   const results = useResource<{ profiles: ViewerProfile[] }>(`/profiles${query ? `?q=${encodeURIComponent(query)}` : ''}`);
@@ -53,7 +54,8 @@ function Discover() {
     && (!available || profile.availabilityStatus === 'AVAILABLE')
     && (!affordable || profile.offers.some((offer) => BigInt(offer.price.amount) <= 1000000n))
     && (!luanda || profile.location?.toLocaleLowerCase('pt').includes('luanda'))
-    && (!video || profile.offers.some(offer => /v[ií]deo/i.test(offer.title + ' ' + (offer.description ?? '')))));
+    && (!video || profile.offers.some(offer => /v[ií]deo/i.test(offer.title + ' ' + (offer.description ?? ''))))
+    && (!brands || profile.acceptsBrands));
 
   return <Screen header={<>
     <h1 className="sr-only">Descobrir criadores</h1>
@@ -63,10 +65,11 @@ function Discover() {
       {input && <button type="button" aria-label="Limpar pesquisa" className="flex size-7 items-center justify-center rounded-full bg-surface2" onClick={() => { setInput(''); setFilter('q', ''); }}><Icon name="close" className="size-3" /></button>}
     </form>
     <div className="rolo -mx-4 mt-[11px] flex gap-1.5 px-4 pb-0.5">
-      <Chip selected={available} onClick={() => setFilter('available', available ? '' : '1')}>Disponíveis</Chip>
+      <Chip selected={available} onClick={() => setFilter('available', available ? '' : '1')}>Responde hoje</Chip>
       <Chip selected={affordable} onClick={() => setFilter('affordable', affordable ? '' : '1')}>Até 10 000 Kz</Chip>
       <Chip selected={luanda} onClick={() => setFilter('city', luanda ? '' : 'Luanda')}>Luanda</Chip>
       <Chip selected={video} onClick={() => setFilter('video', video ? '' : '1')}>Faz vídeo</Chip>
+      <Chip selected={brands} onClick={() => setFilter('brands', brands ? '' : '1')}>Aceita marcas</Chip>
       {category && <Chip selected onClick={() => setFilter('category', '')}>{category} ×</Chip>}
     </div>
   </>} contentClassName="!pt-2">
@@ -78,6 +81,6 @@ function Discover() {
       </button>;
     })}</div></section>}
     {!query && recent.values.length > 0 && <section className="mb-[18px]"><Rotulo>Procuras recentes</Rotulo><div className="mt-2 flex flex-wrap gap-1.5">{recent.values.map(term => <button key={term} onClick={() => { setInput(term); setFilter('q', term); }} className="flex h-[34px] items-center gap-[7px] rounded-full border border-line px-[13px] text-[12px] font-extrabold text-dim"><Icon name="clock" className="size-[13px]" />{term}</button>)}</div></section>}
-    {results.error ? <LoadError message={results.error} retry={results.retry} /> : results.loading ? <ACarregar /> : !filtered.length ? <Vazio titulo={query ? 'Ninguém com esse nome' : 'Sem resultados neste filtro'} texto="Experimenta outra pesquisa ou retira um filtro para ver mais criadores." accao={<button onClick={() => { setInput(''); router.replace('/descobrir'); }} className="min-h-11 rounded-full border border-line px-5 text-[13px] font-[900]">Limpar filtros</button>} /> : <><div className="mb-2 flex justify-between"><Rotulo>{query || category || available || affordable || luanda || video ? filtered.length + ' criadores' : 'Criadores para descobrir'}</Rotulo></div><div className="space-y-2">{filtered.map(profile => <ProfileCard key={profile.id} profile={profile} />)}</div></>}
+    {results.error ? <LoadError message={results.error} retry={results.retry} /> : results.loading ? <ACarregar /> : !filtered.length ? <Vazio titulo={query ? 'Ninguém com esse nome' : 'Sem resultados neste filtro'} texto="Experimenta outra pesquisa ou retira um filtro para ver mais criadores." accao={<button onClick={() => { setInput(''); router.replace('/descobrir'); }} className="min-h-11 rounded-full border border-line px-5 text-[13px] font-[900]">Limpar filtros</button>} /> : <><div className="mb-2 flex justify-between"><Rotulo>{query || category || available || affordable || luanda || video || brands ? filtered.length + ' criadores' : 'Criadores para descobrir'}</Rotulo></div><div className="adaptive-grid">{filtered.map(profile => <ProfileCard key={profile.id} profile={profile} />)}</div></>}
   </Screen>;
 }
